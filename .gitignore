@@ -1,19 +1,83 @@
-*.iml
-.kotlin
-.gradle
+# --- Gradle / Kotlin / JVM ---
+.gradle/
 **/build/
-xcuserdata
-!src/**/build/
+*.iml
+.kotlin/
+!gradle/wrapper/gradle-wrapper.jar
+
+# --- Android ---
 local.properties
-.idea
-.DS_Store
-captures
-.externalNativeBuild
-.cxx
+.externalNativeBuild/
+.cxx/
+captures/
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+lint/reports/
+
+# --- iOS / Xcode ---
+xcuserdata/
+**/DerivedData/
+*.xcworkspace/*
+!*.xcworkspace/contents.xcworkspacedata
 *.xcodeproj/*
 !*.xcodeproj/project.pbxproj
 !*.xcodeproj/xcshareddata/
 !*.xcodeproj/project.xcworkspace/
-!*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
+*.moved-aside
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# --- IDE ---
+.idea/
+*.ipr
+*.iws
+out/
+
+# --- Node / Next.js (webapp) ---
 node_modules/
+.next/
+.nuxt/
+dist/
+*.tsbuildinfo
+.next/
+.env
+.env*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# --- OS ---
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+
+# --- Logs & caches ---
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.cache/
+*.swp
+*.swo
+*~
+
+# --- Optional: uncomment if you don't want to commit lockfiles ---
+# package-lock.json
+# pnpm-lock.yaml
+# yarn.lock
