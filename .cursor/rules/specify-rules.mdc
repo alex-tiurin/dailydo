@@ -3,6 +3,8 @@
 Auto-generated from all feature plans. Last updated: 2026-02-08
 
 ## Active Technologies
+- Node.js (same as webapp); TypeScript or JavaScript for tests + Playwright Test (@playwright/test); webapp is Next.js (existing) (002-playwright-ui-tests)
+- N/A (tests use in-browser state / localStorage via app) (002-playwright-ui-tests)
 
 - Node.js (LTS 18+ or 20+), JavaScript or TypeScript in `server/` + Express (or Fastify) for HTTP; swagger-ui-express + OpenAPI 3 spec for Swagger URL; in-memory store (no DB) (001-nodejs-server-webapp)
 
@@ -23,6 +25,7 @@ npm test && npm run lint
 Node.js (LTS 18+ or 20+), JavaScript or TypeScript in `server/`: Follow standard conventions
 
 ## Recent Changes
+- 002-playwright-ui-tests: Added Node.js (same as webapp); TypeScript or JavaScript for tests + Playwright Test (@playwright/test); webapp is Next.js (existing)
 
 - 001-nodejs-server-webapp: Added Node.js (LTS 18+ or 20+), JavaScript or TypeScript in `server/` + Express (or Fastify) for HTTP; swagger-ui-express + OpenAPI 3 spec for Swagger URL; in-memory store (no DB)
 
