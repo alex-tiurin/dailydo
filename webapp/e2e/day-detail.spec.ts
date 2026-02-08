@@ -1,58 +1,72 @@
 import { test, expect } from "@playwright/test"
+import { CreatePage } from "./pages/CreatePage"
+import { ListPage } from "./pages/ListPage"
+import { DayDetailPage } from "./pages/DayDetailPage"
 
 test.describe("Day detail screen", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/create")
-    await page.getByPlaceholder(/Monday Tasks|List name/i).fill("Detail Test List")
-    await page.getByPlaceholder(/Describe a task/i).first().fill("Task A")
-    await page.getByRole("button", { name: /Add Task/i }).click()
-    await page.getByPlaceholder(/Describe a task/i).nth(1).fill("Task B")
-    await page.getByRole("button", { name: /Create List/i }).click()
+    const createPage = new CreatePage(page)
+    await createPage.goto()
+    await createPage.fillListName("Detail Test List")
+    await createPage.fillTask(0, "Task A")
+    await createPage.addTask()
+    await createPage.fillTask(1, "Task B")
+    await createPage.createListButton.click()
     await expect(page).toHaveURL("/")
-    await page.getByText("Detail Test List").click()
+    const listPage = new ListPage(page)
+    await listPage.goToDayByCardTitle("Detail Test List")
     await expect(page).toHaveURL(/\/day\/[a-f0-9-]+/)
   })
 
   test("shows list name and tasks with checkboxes", async ({ page }) => {
-    await expect(page.getByText("Detail Test List").first()).toBeVisible()
-    await expect(page.getByText("Task A")).toBeVisible()
-    await expect(page.getByText("Task B")).toBeVisible()
-    const checkboxes = page.getByRole("checkbox")
-    await expect(checkboxes).toHaveCount(2)
+    const dayDetailPage = new DayDetailPage(page)
+    await expect(dayDetailPage.listNameHeading("Detail Test List")).toBeVisible()
+    await expect(dayDetailPage.taskText("Task A")).toBeVisible()
+    await expect(dayDetailPage.taskText("Task B")).toBeVisible()
+    await expect(dayDetailPage.checkboxes).toHaveCount(2)
   })
 
   test("progress shows count", async ({ page }) => {
-    await expect(page.getByText("0 / 2").or(page.getByText("0/2"))).toBeVisible()
+    const dayDetailPage = new DayDetailPage(page)
+    await expect(
+      page.getByText("0 / 2").or(page.getByText("0/2"))
+    ).toBeVisible()
   })
 
   test("toggle task to done moves to completed", async ({ page }) => {
-    await expect(page.getByText("To Do", { exact: false })).toBeVisible()
-    const toDoSection = page.locator("section").filter({ hasText: "To Do" })
-    await toDoSection.getByRole("button").first().click()
-    await expect(page.getByText("Completed", { exact: false })).toBeVisible({ timeout: 5000 })
-    await expect(page.getByText("Task A")).toBeVisible()
-    await expect(page.getByText("1 / 2").or(page.getByText("1/2"))).toBeVisible()
+    const dayDetailPage = new DayDetailPage(page)
+    await expect(dayDetailPage.toDoHeading).toBeVisible()
+    await dayDetailPage.toggleFirstToDo()
+    await expect(dayDetailPage.completedHeading).toBeVisible({ timeout: 5000 })
+    await expect(dayDetailPage.taskText("Task A")).toBeVisible()
+    await expect(
+      page.getByText("1 / 2").or(page.getByText("1/2"))
+    ).toBeVisible()
   })
 
   test("toggle task back to incomplete", async ({ page }) => {
-    const toDoSection = page.locator("section").filter({ hasText: "To Do" })
-    await toDoSection.getByRole("button").first().click()
-    await expect(page.getByText("Completed", { exact: false })).toBeVisible({ timeout: 5000 })
-    const completedSection = page.locator("section").filter({ hasText: "Completed" })
-    await completedSection.getByRole("button").first().click()
-    await expect(page.getByText("0 / 2").or(page.getByText("0/2"))).toBeVisible()
+    const dayDetailPage = new DayDetailPage(page)
+    await dayDetailPage.toggleFirstToDo()
+    await expect(dayDetailPage.completedHeading).toBeVisible({ timeout: 5000 })
+    await dayDetailPage.toggleFirstCompleted()
+    await expect(
+      page.getByText("0 / 2").or(page.getByText("0/2"))
+    ).toBeVisible()
   })
 
   test("back to home", async ({ page }) => {
-    await page.getByRole("link", { name: /back|Back/i }).first().click()
+    const dayDetailPage = new DayDetailPage(page)
+    await dayDetailPage.goBack()
     await expect(page).toHaveURL("/")
-    await expect(page.getByText("Detail Test List")).toBeVisible()
+    const listPage = new ListPage(page)
+    await expect(listPage.getCardByTitle("Detail Test List")).toBeVisible()
   })
 })
 
 test.describe("Day detail - not found", () => {
   test("shows not found for invalid id", async ({ page }) => {
-    await page.goto("/day/invalid-id-12345")
-    await expect(page.getByText("This list doesn't exist or was deleted.")).toBeVisible()
+    const dayDetailPage = new DayDetailPage(page)
+    await dayDetailPage.gotoInvalid("invalid-id-12345")
+    await expect(dayDetailPage.notFoundMessage).toBeVisible()
   })
 })
