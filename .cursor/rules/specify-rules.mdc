@@ -1,0 +1,30 @@
+# dailydo Development Guidelines
+
+Auto-generated from all feature plans. Last updated: 2026-02-08
+
+## Active Technologies
+
+- Node.js (LTS 18+ or 20+), JavaScript or TypeScript in `server/` + Express (or Fastify) for HTTP; swagger-ui-express + OpenAPI 3 spec for Swagger URL; in-memory store (no DB) (001-nodejs-server-webapp)
+
+## Project Structure
+
+```text
+backend/
+frontend/
+tests/
+```
+
+## Commands
+
+npm test && npm run lint
+
+## Code Style
+
+Node.js (LTS 18+ or 20+), JavaScript or TypeScript in `server/`: Follow standard conventions
+
+## Recent Changes
+
+- 001-nodejs-server-webapp: Added Node.js (LTS 18+ or 20+), JavaScript or TypeScript in `server/` + Express (or Fastify) for HTTP; swagger-ui-express + OpenAPI 3 spec for Swagger URL; in-memory store (no DB)
+
+<!-- MANUAL ADDITIONS START -->
+<!-- MANUAL ADDITIONS END -->

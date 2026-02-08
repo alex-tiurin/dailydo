@@ -1,0 +1,168 @@
+openapi: 3.0.3
+info:
+  title: Daily Do API
+  description: Backend for Daily Do — days and tasks (in-memory, demo).
+  version: 0.1.0
+
+servers:
+  - url: http://localhost:3001
+    description: Local dev (server port)
+
+paths:
+  /days:
+    get:
+      summary: List days
+      description: Returns all days, newest first.
+      operationId: listDays
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Day'
+    post:
+      summary: Create a day
+      description: Creates a new day with name and optional tasks.
+      operationId: createDay
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                tasks:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/TaskInput'
+                  default: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Day'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /days/{dayId}:
+    get:
+      summary: Get a day
+      description: Returns a single day by id.
+      operationId: getDay
+      parameters:
+        - name: dayId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Day'
+        '404':
+          description: Day not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      summary: Update a day
+      description: Update day (e.g. mark task done). Partial update.
+      operationId: updateDay
+      parameters:
+        - name: dayId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                tasks:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Task'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Day'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Day not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Task:
+      type: object
+      required: [id, label, done]
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        done:
+          type: boolean
+    TaskInput:
+      type: object
+      required: [label]
+      properties:
+        label:
+          type: string
+        done:
+          type: boolean
+          default: false
+    Day:
+      type: object
+      required: [id, name, tasks]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        createdAt:
+          type: string
+          format: date-time
+          description: ISO 8601, for ordering newest first
+    Error:
+      type: object
+      properties:
+        error:
+          type: string

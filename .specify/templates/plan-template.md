@@ -31,7 +31,11 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- **React web scope**: Plan targets webapp (React) and aligns with `webapp/` structure; backend/Node if applicable.
+- **Workflow order**: Plan follows constitution workflow: text test cases → unit tests (run, expect red) → implementation → unit tests (green) → UI tests (e.g. via MCP/skills) → UI tests green → pre-commit full run → agent_history file.
+- **Tests per feature**: Plan includes unit and UI tests; testing stack (e.g. Jest, RTL, Playwright) and use of MCP/skills for UI test generation where applicable are identified.
+- **Green before commit**: No deliverable that bypasses full test run before commit.
+- **Agent history**: Plan or workflow includes creating an aggregating file in `agent_history/` after feature completion.
 
 ## Project Structure
 

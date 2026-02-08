@@ -100,6 +100,14 @@
 - **[Entity 1]**: [What it represents, key attributes without implementation]
 - **[Entity 2]**: [What it represents, relationships to other entities]
 
+## Testing *(mandatory per constitution)*
+
+Each feature MUST be accompanied by unit tests and UI tests. Implementation follows the constitution workflow: text test cases → unit tests (run, expect red) → implementation → unit tests (green) → UI tests (e.g. via MCP/skills) → UI tests green. In this spec, clarify:
+
+- **Text test cases**: Scenarios, preconditions, and expected results derived from the feature description.
+- **Unit tests**: What logic, components, or hooks must be covered and main scenarios.
+- **UI tests**: Which user flows or critical paths must be covered by UI/E2E tests (generation e.g. via MCP/skills).
+
 ## Success Criteria *(mandatory)*
 
 <!--

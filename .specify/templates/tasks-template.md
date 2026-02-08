@@ -8,7 +8,7 @@ description: "Task list template for feature implementation"
 **Input**: Design documents from `/specs/[###-feature-name]/`
 **Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
 
-**Tests**: The examples below include test tasks. Tests are OPTIONAL - only include them if explicitly requested in the feature specification.
+**Tests**: Per constitution, follow the workflow: (1) text test cases, (2) unit tests written and run (must fail), (3) implementation, (4) unit tests green, (5) UI tests generated (e.g. MCP/skills), (6) UI tests green. Tasks below reflect this order; do not omit or reorder test steps unless the constitution is amended.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
@@ -79,14 +79,14 @@ Examples of foundational tasks (adjust based on your project):
 
 **Independent Test**: [How to verify this story works on its own]
 
-### Tests for User Story 1 (OPTIONAL - only if tests requested) ⚠️
+### Test cases and Unit tests (red) for User Story 1 *(constitution workflow step 1–2)*
 
-> **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
+> **NOTE: (1) Write text test cases from feature description. (2) Add unit tests, run suite — new tests MUST fail.**
 
-- [ ] T010 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T011 [P] [US1] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T010 [US1] Document text test cases for [user story] (scenarios, preconditions, expected results)
+- [ ] T011 [P] [US1] Add unit test(s) for [component/logic]; run suite and confirm new tests FAIL
 
-### Implementation for User Story 1
+### Implementation for User Story 1 *(step 3: change app/server code)*
 
 - [ ] T012 [P] [US1] Create [Entity1] model in src/models/[entity1].py
 - [ ] T013 [P] [US1] Create [Entity2] model in src/models/[entity2].py
@@ -94,6 +94,12 @@ Examples of foundational tasks (adjust based on your project):
 - [ ] T015 [US1] Implement [endpoint/feature] in src/[location]/[file].py
 - [ ] T016 [US1] Add validation and error handling
 - [ ] T017 [US1] Add logging for user story 1 operations
+
+### Unit tests (green) and UI tests for User Story 1 *(steps 4–6: unit green, then UI via MCP/skills, then UI green)*
+
+- [ ] T018 [US1] Run unit tests; fix until all pass (green)
+- [ ] T019 [P] [US1] Generate UI test(s) for [user journey] (e.g. Playwright via MCP/skills)
+- [ ] T020 [US1] Run UI tests; fix until all pass and tests are stable
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
@@ -105,17 +111,23 @@ Examples of foundational tasks (adjust based on your project):
 
 **Independent Test**: [How to verify this story works on its own]
 
-### Tests for User Story 2 (OPTIONAL - only if tests requested) ⚠️
+### Test cases and Unit tests (red) for User Story 2
 
-- [ ] T018 [P] [US2] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T019 [P] [US2] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T021 [US2] Document text test cases for [user story]
+- [ ] T022 [P] [US2] Add unit test(s); run and confirm new tests FAIL
 
 ### Implementation for User Story 2
 
-- [ ] T020 [P] [US2] Create [Entity] model in src/models/[entity].py
-- [ ] T021 [US2] Implement [Service] in src/services/[service].py
-- [ ] T022 [US2] Implement [endpoint/feature] in src/[location]/[file].py
-- [ ] T023 [US2] Integrate with User Story 1 components (if needed)
+- [ ] T023 [P] [US2] Create [Entity] model in src/models/[entity].py
+- [ ] T024 [US2] Implement [Service] in src/services/[service].py
+- [ ] T025 [US2] Implement [endpoint/feature] in src/[location]/[file].py
+- [ ] T026 [US2] Integrate with User Story 1 components (if needed)
+
+### Unit tests (green) and UI tests for User Story 2
+
+- [ ] T027 [US2] Run unit tests until green
+- [ ] T028 [P] [US2] Generate UI test(s) (e.g. via MCP/skills)
+- [ ] T029 [US2] Run UI tests until green and stable
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 
@@ -127,16 +139,22 @@ Examples of foundational tasks (adjust based on your project):
 
 **Independent Test**: [How to verify this story works on its own]
 
-### Tests for User Story 3 (OPTIONAL - only if tests requested) ⚠️
+### Test cases and Unit tests (red) for User Story 3
 
-- [ ] T024 [P] [US3] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T025 [P] [US3] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T030 [US3] Document text test cases for [user story]
+- [ ] T031 [P] [US3] Add unit test(s); run and confirm new tests FAIL
 
 ### Implementation for User Story 3
 
-- [ ] T026 [P] [US3] Create [Entity] model in src/models/[entity].py
-- [ ] T027 [US3] Implement [Service] in src/services/[service].py
-- [ ] T028 [US3] Implement [endpoint/feature] in src/[location]/[file].py
+- [ ] T032 [P] [US3] Create [Entity] model in src/models/[entity].py
+- [ ] T033 [US3] Implement [Service] in src/services/[service].py
+- [ ] T034 [US3] Implement [endpoint/feature] in src/[location]/[file].py
+
+### Unit tests (green) and UI tests for User Story 3
+
+- [ ] T035 [US3] Run unit tests until green
+- [ ] T036 [P] [US3] Generate UI test(s) (e.g. via MCP/skills)
+- [ ] T037 [US3] Run UI tests until green and stable
 
 **Checkpoint**: All user stories should now be independently functional
 
@@ -153,8 +171,9 @@ Examples of foundational tasks (adjust based on your project):
 - [ ] TXXX [P] Documentation updates in docs/
 - [ ] TXXX Code cleanup and refactoring
 - [ ] TXXX Performance optimization across all stories
-- [ ] TXXX [P] Additional unit tests (if requested) in tests/unit/
-- [ ] TXXX Security hardening
+- [ ] TXXX Run full test suite; fix any failures (green tests required before commit, per constitution)
+- [ ] TXXX Create aggregating file in `agent_history/` summarizing commands and steps executed for this feature
+- [ ] TXXX Security hardening (if applicable)
 - [ ] TXXX Run quickstart.md validation
 
 ---
@@ -176,13 +195,14 @@ Examples of foundational tasks (adjust based on your project):
 - **User Story 2 (P2)**: Can start after Foundational (Phase 2) - May integrate with US1 but should be independently testable
 - **User Story 3 (P3)**: Can start after Foundational (Phase 2) - May integrate with US1/US2 but should be independently testable
 
-### Within Each User Story
+### Within Each User Story *(constitution workflow)*
 
-- Tests (if included) MUST be written and FAIL before implementation
-- Models before services
-- Services before endpoints
-- Core implementation before integration
-- Story complete before moving to next priority
+- Text test cases first, then unit tests; run unit tests — they MUST fail before implementation
+- Implementation (models, services, endpoints, UI) next
+- Run unit tests until green
+- Generate UI tests (e.g. via MCP/skills), then run UI tests until green and stable
+- Models before services; services before endpoints
+- Story complete (all tests green) before moving to next priority
 
 ### Parallel Opportunities
 
@@ -198,13 +218,12 @@ Examples of foundational tasks (adjust based on your project):
 ## Parallel Example: User Story 1
 
 ```bash
-# Launch all tests for User Story 1 together (if tests requested):
-Task: "Contract test for [endpoint] in tests/contract/test_[name].py"
-Task: "Integration test for [user journey] in tests/integration/test_[name].py"
-
-# Launch all models for User Story 1 together:
+# After text test cases (T010), add unit tests (T011) and run — expect red. Then implementation:
+# Launch models for User Story 1 together (T012, T013):
 Task: "Create [Entity1] model in src/models/[entity1].py"
 Task: "Create [Entity2] model in src/models/[entity2].py"
+
+# Then unit green (T018), UI generation (T019), UI green (T020).
 ```
 
 ---
