@@ -1,0 +1,20 @@
+schema: spec-driven
+
+context: |
+  Project: DailyDo — daily task tracking app
+  Screens: My Lists (main, bar-chart progress widget), Create New List (centered card on web / fullscreen on mobile), Progress View (pending/completed split, checkbox toggles, edit button)
+
+  Mobile: Kotlin 2.3.0, Compose Multiplatform 1.10.0, Material3, targets Android + iOS (minSdk 24)
+  Web: React, layout width 1280px, light + dark theme, design in pencil-design.pen
+  Backend: Node.js, in-memory storage (no DB), demo only
+
+  Package: com.atiurin.dailydo
+  All UI and business logic lives in commonMain; platform code is minimal wrappers only
+
+rules:
+  tasks:
+    - Break tasks into chunks of max 2 hours
+    - Prefer commonMain over platform-specific code
+    - Follow TDD: write tests first → run and confirm they fail → implement → confirm tests pass
+  proposal:
+    - Always specify which platform(s) are affected (mobile / web / backend)
