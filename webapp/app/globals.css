@@ -1,0 +1,112 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    --font-heading: var(--font-sans);
+    --font-sans: var(--font-sans);
+    /* DailyDo semantic tokens */
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-surface: var(--surface);
+    --color-text-secondary: var(--text-secondary);
+    --color-text-done: var(--text-done);
+    --color-checkbox-done: var(--checkbox-done);
+    --color-divider: var(--divider);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --color-destructive: var(--destructive);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+    /* DailyDo light theme */
+    --primary: #7033FF;
+    --primary-foreground: #FFFFFF;
+    --background: #FDFDFD;
+    --foreground: #1A1A2E;
+    --surface: #F4F0FF;
+    --text-secondary: #6B6B8A;
+    --text-done: #B0AACC;
+    --checkbox-done: #34C759;
+    --divider: #E8E2F5;
+
+    /* shadcn semantic aliases */
+    --card: #FDFDFD;
+    --card-foreground: #1A1A2E;
+    --popover: #FDFDFD;
+    --popover-foreground: #1A1A2E;
+    --secondary: #F4F0FF;
+    --secondary-foreground: #1A1A2E;
+    --muted: #F4F0FF;
+    --muted-foreground: #6B6B8A;
+    --accent: #F4F0FF;
+    --accent-foreground: #1A1A2E;
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: #E8E2F5;
+    --input: #E8E2F5;
+    --ring: #7033FF;
+    --radius: 0.75rem;
+}
+
+.dark {
+    /* DailyDo dark theme */
+    --primary: #8C5CFF;
+    --primary-foreground: #FFFFFF;
+    --background: #1A1B1E;
+    --foreground: #F1F1F5;
+    --surface: #25262B;
+    --text-secondary: #8A8AAA;
+    --text-done: #4A4A60;
+    --checkbox-done: #30D158;
+    --divider: #2E2F36;
+
+    /* shadcn semantic aliases */
+    --card: #25262B;
+    --card-foreground: #F1F1F5;
+    --popover: #25262B;
+    --popover-foreground: #F1F1F5;
+    --secondary: #25262B;
+    --secondary-foreground: #F1F1F5;
+    --muted: #25262B;
+    --muted-foreground: #8A8AAA;
+    --accent: #25262B;
+    --accent-foreground: #F1F1F5;
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: #2E2F36;
+    --input: #2E2F36;
+    --ring: #8C5CFF;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    }
+  body {
+    @apply bg-background text-foreground;
+    }
+  html {
+    @apply font-sans;
+    }
+}
