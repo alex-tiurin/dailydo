@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { mockApiLists, DEFAULT_MOCK_LISTS } from './helpers/mock-api'
+import { MyListsPage } from './page-objects/MyListsPage'
 
 test.describe('My Lists screen', () => {
   test('sends GET /api/lists on page load and displays day cards', async ({ page }) => {
@@ -17,14 +18,13 @@ test.describe('My Lists screen', () => {
       }
     })
 
-    await page.goto('/')
+    const myLists = new MyListsPage(page)
+    await myLists.open()
+    await myLists.verifyDayCardVisible('mock-list-1')
 
-    // Wait for UI to render from the mocked response
-    await expect(page.getByTestId('day-card-mock-list-1')).toBeVisible()
-
-    // By now the request was definitely made
     expect(requestMade).toBe(true)
-    await expect(page.getByTestId('day-card-mock-list-2')).toBeVisible()
+
+    await myLists.verifyDayCardVisible('mock-list-2')
   })
 
   test('GET /api/lists uses GET method, not POST or other', async ({ page }) => {
@@ -38,29 +38,26 @@ test.describe('My Lists screen', () => {
       })
     })
 
-    await page.goto('/')
-    await expect(page.getByTestId('day-card-mock-list-1')).toBeVisible()
+    const myLists = new MyListsPage(page)
+    await myLists.open()
+    await myLists.verifyDayCardVisible('mock-list-1')
 
     expect(methods).toContain('GET')
     expect(methods.every((m) => m === 'GET')).toBe(true)
   })
 
   test('renders cards in server-provided order (sort is server responsibility)', async ({ page }) => {
-    // Server returns oldest first — UI must render in that exact order without re-sorting
     const outOfOrder = [
       { ...DEFAULT_MOCK_LISTS[0], id: 'older', date: '2026-03-01', name: 'Older List' },
       { ...DEFAULT_MOCK_LISTS[0], id: 'newer', date: '2026-03-27', name: 'Newer List' },
     ]
     await mockApiLists(page, outOfOrder)
-    await page.goto('/')
 
-    await expect(page.getByTestId('day-card-older')).toBeVisible()
-    await expect(page.getByTestId('day-card-newer')).toBeVisible()
-
-    // Use CSS attribute selector to exclude progress-bar testids (day-card-progress-*)
-    const cards = page.locator('[data-testid^="day-card-"]:not([data-testid^="day-card-progress"])')
-    await expect(cards.nth(0)).toHaveAttribute('data-testid', 'day-card-older')
-    await expect(cards.nth(1)).toHaveAttribute('data-testid', 'day-card-newer')
+    const myLists = new MyListsPage(page)
+    await myLists.open()
+    await myLists.verifyDayCardVisible('older')
+    await myLists.verifyDayCardVisible('newer')
+    await myLists.verifyDayCardsOrder(['older', 'newer'])
   })
 
   test('shows empty state when API returns empty array', async ({ page }) => {
@@ -76,11 +73,9 @@ test.describe('My Lists screen', () => {
       }
     })
 
-    await page.goto('/')
-
-    await expect(page.getByTestId('empty-state')).toBeVisible()
-    await expect(page.getByTestId('create-first-list-button')).toBeVisible()
-    await expect(page.getByText('No data yet')).toBeVisible()
+    const myLists = new MyListsPage(page)
+    await myLists.open()
+    await myLists.verifyEmptyState()
   })
 
   test('recovers gracefully when API returns 500 — does not crash', async ({ page }) => {
@@ -92,26 +87,24 @@ test.describe('My Lists screen', () => {
       }
     })
 
-    await page.goto('/')
-
-    // Page must render — navbar and page container must be present
-    await expect(page.getByTestId('navbar')).toBeVisible()
-    await expect(page.getByTestId('my-lists-page')).toBeVisible()
-    // No unhandled crash (no Next.js error overlay)
-    await expect(page.locator('nextjs-portal')).not.toBeVisible()
+    const myLists = new MyListsPage(page)
+    await myLists.open()
+    await myLists.verifyPageDidNotCrash()
   })
 
   test('shows progress overview widget when lists exist', async ({ page }) => {
     await mockApiLists(page, DEFAULT_MOCK_LISTS)
-    await page.goto('/')
 
-    await expect(page.getByTestId('progress-overview')).toBeVisible()
+    const myLists = new MyListsPage(page)
+    await myLists.open()
+    await myLists.verifyProgressOverviewVisible()
   })
 
   test('hides progress overview widget when no lists', async ({ page }) => {
     await mockApiLists(page, [])
-    await page.goto('/')
 
-    await expect(page.getByTestId('progress-overview')).not.toBeVisible()
+    const myLists = new MyListsPage(page)
+    await myLists.open()
+    await myLists.verifyProgressOverviewHidden()
   })
 })

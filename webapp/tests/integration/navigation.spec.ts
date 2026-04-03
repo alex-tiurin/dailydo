@@ -1,5 +1,8 @@
-import { test, expect } from '@playwright/test'
+import { test } from '@playwright/test'
 import { mockApiLists, mockApiList, DEFAULT_MOCK_LISTS } from './helpers/mock-api'
+import { MyListsPage } from './page-objects/MyListsPage'
+import { CreateListPage } from './page-objects/CreateListPage'
+import { ProgressViewPage } from './page-objects/ProgressViewPage'
 
 test.describe('Navigation between screens', () => {
   test.beforeEach(async ({ page }) => {
@@ -10,12 +13,12 @@ test.describe('Navigation between screens', () => {
   })
 
   test('navigates to /create when clicking "+ New List"', async ({ page }) => {
-    await page.goto('/')
+    const myLists = new MyListsPage(page)
+    await myLists.open()
+    await myLists.clickNewListButton()
 
-    await page.getByTestId('new-list-button').click()
-
-    await expect(page).toHaveURL('/create')
-    await expect(page.getByTestId('create-list-page')).toBeVisible()
+    const createList = new CreateListPage(page)
+    await createList.verifyOnCreatePage()
   })
 
   test('navigates to /create from empty state button', async ({ page }) => {
@@ -31,30 +34,30 @@ test.describe('Navigation between screens', () => {
       }
     })
 
-    await page.goto('/')
-
-    await page.getByTestId('create-first-list-button').click()
-
-    await expect(page).toHaveURL('/create')
+    const myLists = new MyListsPage(page)
+    await myLists.open()
+    await myLists.clickCreateFirstListButton()
   })
 
   test('navigates to /list/:id when clicking a day card', async ({ page }) => {
     const list = DEFAULT_MOCK_LISTS[0]
-    await page.goto('/')
 
-    await page.getByTestId(`day-card-${list.id}`).click()
+    const myLists = new MyListsPage(page)
+    await myLists.open()
+    await myLists.clickDayCard(list.id)
 
-    await expect(page).toHaveURL(`/list/${list.id}`)
-    await expect(page.getByTestId('progress-view-page')).toBeVisible()
+    const progressView = new ProgressViewPage(page)
+    await progressView.verifySectionsVisible()
   })
 
   test('navigates back to / from Progress View', async ({ page }) => {
     const list = DEFAULT_MOCK_LISTS[0]
-    await page.goto(`/list/${list.id}`)
 
-    await page.getByTestId('back-button').click()
+    const progressView = new ProgressViewPage(page)
+    await progressView.open(list.id)
+    await progressView.clickBackButton()
 
-    await expect(page).toHaveURL('/')
-    await expect(page.getByTestId('my-lists-page')).toBeVisible()
+    const myLists = new MyListsPage(page)
+    await myLists.verifyPageDidNotCrash()
   })
 })

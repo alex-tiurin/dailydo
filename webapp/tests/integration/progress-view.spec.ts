@@ -6,6 +6,7 @@ import {
   captureRequestDetails,
   DEFAULT_MOCK_LISTS,
 } from './helpers/mock-api'
+import { ProgressViewPage } from './page-objects/ProgressViewPage'
 
 const LIST = DEFAULT_MOCK_LISTS[1] // Thursday Sprint: task-2-1 pending, task-2-2 done
 const pendingTask = LIST.tasks.find((t) => !t.done)!
@@ -25,11 +26,11 @@ test.describe('Progress View screen', () => {
       done: true,
     })
 
-    await page.goto(`/list/${LIST.id}`)
-    await page.getByTestId(`task-checkbox-${pendingTask.id}`).click()
+    const progressView = new ProgressViewPage(page)
+    await progressView.open(LIST.id)
+    await progressView.clickTaskCheckbox(pendingTask.id)
 
     const body = await requestPromise
-    // toEqual — strict, no extra fields (e.g. name must not be included)
     expect(body).toEqual({ done: true })
   })
 
@@ -39,8 +40,9 @@ test.describe('Progress View screen', () => {
       done: false,
     })
 
-    await page.goto(`/list/${LIST.id}`)
-    await page.getByTestId(`task-checkbox-${completedTask.id}`).click()
+    const progressView = new ProgressViewPage(page)
+    await progressView.open(LIST.id)
+    await progressView.clickTaskCheckbox(completedTask.id)
 
     const body = await requestPromise
     expect(body).toEqual({ done: false })
@@ -59,8 +61,9 @@ test.describe('Progress View screen', () => {
       })
     })
 
-    await page.goto(`/list/${LIST.id}`)
-    await page.getByTestId(`task-checkbox-${pendingTask.id}`).click()
+    const progressView = new ProgressViewPage(page)
+    await progressView.open(LIST.id)
+    await progressView.clickTaskCheckbox(pendingTask.id)
 
     await page.waitForTimeout(500)
     expect(capturedUrl).toContain(`/api/lists/${LIST.id}/tasks/${pendingTask.id}`)
@@ -74,8 +77,9 @@ test.describe('Progress View screen', () => {
       { status: 200, body: { ...pendingTask, done: true } }
     )
 
-    await page.goto(`/list/${LIST.id}`)
-    await page.getByTestId(`task-checkbox-${pendingTask.id}`).click()
+    const progressView = new ProgressViewPage(page)
+    await progressView.open(LIST.id)
+    await progressView.clickTaskCheckbox(pendingTask.id)
 
     const { headers, method } = await requestPromise
     expect(method).toBe('PATCH')
@@ -85,7 +89,6 @@ test.describe('Progress View screen', () => {
   // --- Error handling ---
 
   test('redirects to / when list id is not found in context', async ({ page }) => {
-    // Override lists response with empty array — list won't be found
     await page.route('**/api/lists', async (route) => {
       if (route.request().method() === 'GET') {
         await route.fulfill({
@@ -98,41 +101,34 @@ test.describe('Progress View screen', () => {
       }
     })
 
-    await page.goto(`/list/non-existent-id`)
-
-    // Should redirect back to main screen
-    await expect(page).toHaveURL('/')
+    const progressView = new ProgressViewPage(page)
+    await progressView.attemptOpen('non-existent-id')
+    await progressView.verifyRedirectedToHome()
   })
 
   // --- UI correctness ---
 
   test('displays pending and completed sections', async ({ page }) => {
-    await page.goto(`/list/${LIST.id}`)
-
-    await expect(page.getByTestId('pending-section')).toBeVisible()
-    await expect(page.getByTestId('completed-section')).toBeVisible()
+    const progressView = new ProgressViewPage(page)
+    await progressView.open(LIST.id)
+    await progressView.verifySectionsVisible()
   })
 
   test('pending section shows only undone tasks', async ({ page }) => {
-    await page.goto(`/list/${LIST.id}`)
+    const progressView = new ProgressViewPage(page)
+    await progressView.open(LIST.id)
 
-    const pendingTasks = LIST.tasks.filter((t) => !t.done)
-    for (const task of pendingTasks) {
-      await expect(page.getByTestId(`task-name-${task.id}`)).toBeVisible()
-    }
-    // Completed tasks must NOT appear in pending area (they are below completed section)
-    const completedTasks = LIST.tasks.filter((t) => t.done)
-    for (const task of completedTasks) {
-      await expect(page.getByTestId(`task-name-${task.id}`)).toBeVisible() // visible but in completed section
+    for (const task of LIST.tasks) {
+      await progressView.verifyTaskVisible(task.id)
     }
   })
 
   test('shows progress counter with correct done/total', async ({ page }) => {
-    await page.goto(`/list/${LIST.id}`)
-
     const doneCount = LIST.tasks.filter((t) => t.done).length
     const total = LIST.tasks.length
 
-    await expect(page.getByTestId('progress-counter')).toContainText(`${doneCount}/${total}`)
+    const progressView = new ProgressViewPage(page)
+    await progressView.open(LIST.id)
+    await progressView.verifyProgressCounter(doneCount, total)
   })
 })

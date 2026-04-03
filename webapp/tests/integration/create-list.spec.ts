@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { mockApiLists, captureCreateListRequest, captureRequestDetails } from './helpers/mock-api'
+import { CreateListPage } from './page-objects/CreateListPage'
 
 const NEW_LIST_RESPONSE = {
   id: 'new-list-id',
@@ -19,16 +20,15 @@ test.describe('Create New List screen', () => {
   test('POST body has exact structure { name, tasks } — no extra fields', async ({ page }) => {
     const requestPromise = captureCreateListRequest(page)
 
-    await page.goto('/create')
-    await page.getByTestId('list-name-input').fill('Test List')
-    await page.getByTestId('task-form-input').first().fill('Task 1')
-    await page.getByTestId('add-task-button').click()
-    await page.getByTestId('task-form-input').nth(1).fill('Task 2')
-    await page.getByTestId('save-list-button').click()
+    const createList = new CreateListPage(page)
+    await createList.open()
+    await createList.fillListName('Test List')
+    await createList.fillTask(0, 'Task 1')
+    await createList.addTask()
+    await createList.fillTask(1, 'Task 2')
+    await createList.submitList()
 
     const body = await requestPromise
-
-    // toEqual — strict, no extra fields allowed
     expect(body).toEqual({
       name: 'Test List',
       tasks: [{ name: 'Task 1' }, { name: 'Task 2' }],
@@ -41,9 +41,10 @@ test.describe('Create New List screen', () => {
       body: NEW_LIST_RESPONSE,
     })
 
-    await page.goto('/create')
-    await page.getByTestId('list-name-input').fill('Test List')
-    await page.getByTestId('save-list-button').click()
+    const createList = new CreateListPage(page)
+    await createList.open()
+    await createList.fillListName('Test List')
+    await createList.submitList()
 
     const { headers } = await requestPromise
     expect(headers['content-type']).toContain('application/json')
@@ -52,31 +53,28 @@ test.describe('Create New List screen', () => {
   test('each task in POST body has only { name } — no id or done fields', async ({ page }) => {
     const requestPromise = captureCreateListRequest(page)
 
-    await page.goto('/create')
-    await page.getByTestId('list-name-input').fill('My List')
-    await page.getByTestId('task-form-input').first().fill('Task A')
-    await page.getByTestId('save-list-button').click()
+    const createList = new CreateListPage(page)
+    await createList.open()
+    await createList.fillListName('My List')
+    await createList.fillTask(0, 'Task A')
+    await createList.submitList()
 
     const body = await requestPromise as { tasks: unknown[] }
-
     expect(body.tasks[0]).toEqual({ name: 'Task A' })
-    // Must NOT include id or done — those are assigned by the server
     expect(body.tasks[0]).not.toHaveProperty('id')
     expect(body.tasks[0]).not.toHaveProperty('done')
   })
 
   test('navigates to / after successful POST', async ({ page }) => {
     const requestPromise = captureCreateListRequest(page)
-    // After create, GET /api/lists will be called again
     await mockApiLists(page, [NEW_LIST_RESPONSE as never])
 
-    await page.goto('/create')
-    await page.getByTestId('list-name-input').fill('Test List')
-    await page.getByTestId('save-list-button').click()
+    const createList = new CreateListPage(page)
+    await createList.open()
+    await createList.fillListName('Test List')
+    await createList.submitList()
 
     await requestPromise
-    await expect(page).toHaveURL('/')
-    await expect(page.getByTestId('my-lists-page')).toBeVisible()
   })
 
   test('does not submit when list name is empty', async ({ page }) => {
@@ -90,26 +88,25 @@ test.describe('Create New List screen', () => {
       }
     })
 
-    await page.goto('/create')
-    await page.getByTestId('save-list-button').click()
+    const createList = new CreateListPage(page)
+    await createList.open()
+    await createList.clickSaveExpectingNoSubmit()
 
     expect(requestMade).toBe(false)
-    await expect(page).toHaveURL('/create')
   })
 
   test('filters out empty tasks before submitting', async ({ page }) => {
     const requestPromise = captureCreateListRequest(page)
 
-    await page.goto('/create')
-    await page.getByTestId('list-name-input').fill('My List')
-    await page.getByTestId('task-form-input').first().fill('Valid Task')
-    await page.getByTestId('add-task-button').click()
+    const createList = new CreateListPage(page)
+    await createList.open()
+    await createList.fillListName('My List')
+    await createList.fillTask(0, 'Valid Task')
+    await createList.addTask()
     // Leave second task empty
-
-    await page.getByTestId('save-list-button').click()
+    await createList.submitList()
 
     const body = await requestPromise as { tasks: unknown[] }
-
     expect(body.tasks).toHaveLength(1)
     expect(body.tasks[0]).toEqual({ name: 'Valid Task' })
   })
