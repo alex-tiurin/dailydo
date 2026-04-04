@@ -66,4 +66,89 @@ export class ProgressViewPage {
   async verifyRedirectedToHome(): Promise<void> {
     await expect(this.page).toHaveURL('/')
   }
+
+  /** Verify Progress View page is displayed */
+  async verifyPageVisible(): Promise<void> {
+    await expect(this.progressViewPage).toBeVisible()
+  }
+
+  /** Verify back button is visible */
+  async verifyBackButtonVisible(): Promise<void> {
+    await expect(this.backButton).toBeVisible()
+  }
+
+  /** Verify pending section is visible */
+  async verifyPendingSectionVisible(): Promise<void> {
+    await expect(this.pendingSection).toBeVisible()
+  }
+
+  /** Verify pending section is not visible */
+  async verifyPendingSectionNotVisible(): Promise<void> {
+    await expect(this.pendingSection).not.toBeVisible()
+  }
+
+  /** Verify completed section is visible */
+  async verifyCompletedSectionVisible(): Promise<void> {
+    await expect(this.completedSection).toBeVisible()
+  }
+
+  /** Verify completed section is not visible */
+  async verifyCompletedSectionNotVisible(): Promise<void> {
+    await expect(this.completedSection).not.toBeVisible()
+  }
+
+  /** Verify a task text is visible on the page */
+  async verifyTaskTextVisible(text: string): Promise<void> {
+    await expect(this.page.locator('[data-testid^="task-name-"]').filter({ hasText: text })).toBeVisible()
+  }
+
+  /** Get task ID by task name text. Finds task-name-* element containing the text and extracts the ID. */
+  async getTaskIdByName(name: string): Promise<string> {
+    const taskNameEl = this.page.locator('[data-testid^="task-name-"]').filter({ hasText: name })
+    const testId = await taskNameEl.getAttribute('data-testid')
+    expect(testId).toBeTruthy()
+    return testId!.replace('task-name-', '')
+  }
+
+  // --- E2e extensions (no API mocking, real backend) ---
+
+  /** Verify a task is visible in the pending section */
+  async verifyTaskInPendingSection(taskId: string): Promise<void> {
+    await expect(this.taskName(taskId)).toBeVisible()
+    await expect(this.taskName(taskId)).not.toHaveCSS('text-decoration-line', 'line-through')
+  }
+
+  /** Verify a task is visible in the completed section (strikethrough text) */
+  async verifyTaskInCompletedSection(taskId: string): Promise<void> {
+    await expect(this.taskName(taskId)).toBeVisible()
+    await expect(this.taskName(taskId)).toHaveCSS('text-decoration-line', 'line-through')
+  }
+
+  /** Click the edit (pencil) button for a task */
+  async clickEditTask(taskId: string): Promise<void> {
+    await this.page.getByTestId(`task-edit-${taskId}`).click()
+  }
+
+  /**
+   * Rename a task using inline edit.
+   * NOTE: As of exploratory testing (2026-04-04), the task-edit button has no handler —
+   * inline editing is NOT implemented. This method is a placeholder for when it is.
+   */
+  async renameTask(taskId: string, name: string): Promise<void> {
+    await this.clickEditTask(taskId)
+    // Assumes an input field becomes visible after clicking edit
+    const editInput = this.page.getByTestId(`task-edit-input-${taskId}`)
+    await editInput.fill(name)
+    await editInput.press('Enter')
+  }
+
+  /** Verify task name text content */
+  async verifyTaskName(taskId: string, name: string): Promise<void> {
+    await expect(this.taskName(taskId)).toHaveText(name)
+  }
+
+  /** Wait for the progress counter to show the expected value (e.g. "2/3 done") */
+  async waitForProgressCounter(done: number, total: number): Promise<void> {
+    await expect(this.progressCounter).toContainText(`${done}/${total}`)
+  }
 }

@@ -87,4 +87,40 @@ export class MyListsPage {
     await expect(this.myListsPage).toBeVisible()
     await expect(this.nextjsPortal).not.toBeVisible()
   }
+
+  /** Verify validation error message is visible */
+  async verifyValidationError(message: string): Promise<void> {
+    await expect(this.page.getByText(message)).toBeVisible()
+  }
+
+  /** Get the list ID from the first day card's data-testid */
+  async getFirstDayCardListId(): Promise<string> {
+    const firstCard = this.allDayCards().first()
+    const testId = await firstCard.getAttribute('data-testid')
+    expect(testId).toBeTruthy()
+    return testId!.replace('day-card-', '')
+  }
+
+  // --- E2e extensions (no API mocking, real backend) ---
+
+  /** Verify a day card with a given name is visible (matches by text within any card) */
+  async verifyDayCardWithNameVisible(name: string): Promise<void> {
+    await expect(this.page.locator('[data-testid^="day-card-"]').filter({ hasText: name })).toBeVisible()
+  }
+
+  /** Return the first day card that contains the given list name */
+  dayCardByName(name: string): Locator {
+    return this.page.locator('[data-testid^="day-card-"]:not([data-testid^="day-card-progress"])').filter({ hasText: name })
+  }
+
+  /** Click a day card matched by list name */
+  async clickDayCardByName(name: string): Promise<void> {
+    await this.dayCardByName(name).click()
+    await expect(this.page).toHaveURL(/\/list\//)
+  }
+
+  /** Verify a day card with a given name is no longer on the page */
+  async verifyListDeleted(name: string): Promise<void> {
+    await expect(this.page.locator('[data-testid^="day-card-"]').filter({ hasText: name })).not.toBeVisible()
+  }
 }

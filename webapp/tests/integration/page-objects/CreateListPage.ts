@@ -59,4 +59,9 @@ export class CreateListPage {
     await expect(this.page).toHaveURL('/create')
     await expect(this.createListPage).toBeVisible()
   }
+
+  /** Verify a validation error message is visible */
+  async verifyValidationError(message: string): Promise<void> {
+    await expect(this.page.getByText(message)).toBeVisible()
+  }
 }
