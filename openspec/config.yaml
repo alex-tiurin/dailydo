@@ -16,5 +16,6 @@ rules:
     - Break tasks into chunks of max 2 hours
     - Prefer commonMain over platform-specific code
     - Follow TDD: write tests first → run and confirm they fail → implement → confirm tests pass
+    - After completing each task, run a CodeReview using the Opus model (claude-opus-4-6) via the Agent tool with subagent_type=general-purpose; review changed files for correctness, security, and adherence to project rules; report findings before moving to the next task
   proposal:
     - Always specify which platform(s) are affected (mobile / web / backend)
