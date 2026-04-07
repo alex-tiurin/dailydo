@@ -13,12 +13,14 @@ interface TaskItemProps {
 export function TaskItem({ task, onToggle, onEdit }: TaskItemProps) {
   return (
     <div
-      data-testid={`task-item-${task.id}`}
+      data-testid="task-item"
+      aria-label={task.name}
       className="flex items-center gap-3 py-3 border-b border-[var(--divider)]"
     >
       {/* Checkbox */}
       <div
-        data-testid={`task-checkbox-${task.id}`}
+        data-testid="task-checkbox"
+        aria-label={`Toggle ${task.name}`}
         onClick={() => onToggle?.(task.id)}
         className={`
           w-5 h-5 rounded flex items-center justify-center cursor-pointer flex-shrink-0
@@ -33,6 +35,7 @@ export function TaskItem({ task, onToggle, onEdit }: TaskItemProps) {
 
       {/* Task name */}
       <span
+        data-testid="task-name"
         className={`text-base flex-1 ${
           task.done ? "line-through text-[var(--text-done)]" : "text-foreground"
         }`}
@@ -42,10 +45,10 @@ export function TaskItem({ task, onToggle, onEdit }: TaskItemProps) {
 
       {/* Edit button */}
       <button
-        data-testid={`task-edit-${task.id}`}
+        data-testid="task-edit"
         onClick={() => onEdit?.(task.id)}
         className="ml-auto p-1 cursor-pointer"
-        aria-label="Edit task"
+        aria-label={`Edit ${task.name}`}
       >
         <Pencil size={16} className="text-[var(--text-secondary)]" />
       </button>

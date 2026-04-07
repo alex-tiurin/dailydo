@@ -1,0 +1,234 @@
+{
+  "version": 1,
+  "name": "list",
+  "domain": "localhost_3000",
+  "path": "/list",
+  "fullUrl": "http://localhost:3000/list?id=5ff348db-a6ab-41fe-b925-b7b840f181f6",
+  "createdAt": "2026-04-19T12:26:50.330Z",
+  "updatedAt": "2026-04-19T13:46:19.036Z",
+  "tree": {
+    "url": "http://localhost:3000/list?id=5ff348db-a6ab-41fe-b925-b7b840f181f6",
+    "title": "DailyDo",
+    "elements": [
+      {
+        "role": "button",
+        "name": "Open Next.js Dev Tools",
+        "ref": "e192",
+        "selector": "internal:role=button[name=\"Open Next.js Dev Tools\"i]",
+        "locators": {
+          "javascript": "getByRole('button', { name: 'Open Next.js Dev Tools' })"
+        },
+        "actions": [
+          "click"
+        ],
+        "attributes": {},
+        "children": [],
+        "propertyName": "openNextJsDevToolsButton",
+        "generatedLocator": "getByRole('button', { name: 'Open Next.js Dev Tools' })"
+      },
+      {
+        "role": "alert",
+        "name": "",
+        "ref": "e196",
+        "selector": "[id=\"__next-route-announcer__\"]",
+        "locators": {
+          "javascript": "locator('[id=\"__next-route-announcer__\"]')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "alert",
+        "generatedLocator": "locator('[id=\"__next-route-announcer__\"]')"
+      },
+      {
+        "role": "navigation",
+        "name": "",
+        "ref": "e217",
+        "selector": "internal:testid=[data-testid=\"navbar\"s]",
+        "locators": {
+          "javascript": "getByTestId('navbar')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "navigation",
+        "generatedLocator": "getByTestId('navbar')"
+      },
+      {
+        "role": "main",
+        "name": "",
+        "ref": "e221",
+        "selector": "internal:testid=[data-testid=\"progress-view-page\"s]",
+        "locators": {
+          "javascript": "getByTestId('progress-view-page')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [
+          {
+            "role": "button",
+            "name": "Back",
+            "ref": "e223",
+            "selector": "internal:testid=[data-testid=\"back-button\"s]",
+            "locators": {
+              "javascript": "getByTestId('back-button')"
+            },
+            "actions": [
+              "click"
+            ],
+            "attributes": {},
+            "children": [],
+            "propertyName": "backButton",
+            "generatedLocator": "getByTestId('back-button')"
+          },
+          {
+            "role": "img",
+            "name": "",
+            "ref": "e226",
+            "selector": "svg >> nth=1",
+            "locators": {
+              "javascript": "locator('svg').nth(1)"
+            },
+            "actions": [],
+            "attributes": {},
+            "children": [],
+            "propertyName": "img",
+            "generatedLocator": "locator('svg').nth(1)"
+          },
+          {
+            "role": "heading",
+            "name": "TC-L-01 DailyDo List",
+            "ref": "e229",
+            "selector": "internal:role=heading[name=\"TC-L-01 DailyDo List\"i]",
+            "locators": {
+              "javascript": "getByRole('heading', { name: 'TC-L-01 DailyDo List' })"
+            },
+            "actions": [],
+            "attributes": {
+              "level": 1
+            },
+            "children": [],
+            "propertyName": "tcL01DailydoListHeading",
+            "generatedLocator": "getByRole('heading', { name: 'TC-L-01 DailyDo List' })"
+          },
+          {
+            "role": "button",
+            "name": "Edit First task user story",
+            "ref": "e235",
+            "selector": "internal:testid=[data-testid=\"task-edit\"s]",
+            "locators": {
+              "javascript": "getByTestId('task-edit')"
+            },
+            "actions": [
+              "click"
+            ],
+            "attributes": {},
+            "children": [],
+            "propertyName": "editFirstTaskUserStoryButton",
+            "generatedLocator": "getByTestId('task-edit')"
+          }
+        ],
+        "propertyName": "main",
+        "generatedLocator": "getByTestId('progress-view-page')"
+      },
+      {
+        "role": "generic",
+        "name": "navbar-logo",
+        "ref": null,
+        "selector": "css=[data-testid=\"navbar-logo\"]",
+        "locators": {
+          "javascript": "locator('[data-testid=\"navbar-logo\"]')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "navbarLogoGeneric",
+        "generatedLocator": "locator('[data-testid=\"navbar-logo\"]')"
+      },
+      {
+        "role": "generic",
+        "name": "navbar-avatar",
+        "ref": null,
+        "selector": "css=[data-testid=\"navbar-avatar\"]",
+        "locators": {
+          "javascript": "locator('[data-testid=\"navbar-avatar\"]')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "navbarAvatarGeneric",
+        "generatedLocator": "locator('[data-testid=\"navbar-avatar\"]')"
+      },
+      {
+        "role": "generic",
+        "name": "progress-counter",
+        "ref": null,
+        "selector": "css=[data-testid=\"progress-counter\"]",
+        "locators": {
+          "javascript": "locator('[data-testid=\"progress-counter\"]')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "progressCounterGeneric",
+        "generatedLocator": "locator('[data-testid=\"progress-counter\"]')"
+      },
+      {
+        "role": "generic",
+        "name": "pending-section",
+        "ref": null,
+        "selector": "css=[data-testid=\"pending-section\"]",
+        "locators": {
+          "javascript": "locator('[data-testid=\"pending-section\"]')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "pendingSectionGeneric",
+        "generatedLocator": "locator('[data-testid=\"pending-section\"]')"
+      },
+      {
+        "role": "generic",
+        "name": "task-item",
+        "ref": null,
+        "selector": "css=[data-testid=\"task-item\"]",
+        "locators": {
+          "javascript": "locator('[data-testid=\"task-item\"]')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "taskItemGeneric",
+        "generatedLocator": "locator('[data-testid=\"task-item\"]')"
+      },
+      {
+        "role": "generic",
+        "name": "task-checkbox",
+        "ref": null,
+        "selector": "css=[data-testid=\"task-checkbox\"]",
+        "locators": {
+          "javascript": "locator('[data-testid=\"task-checkbox\"]')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "taskCheckboxGeneric",
+        "generatedLocator": "locator('[data-testid=\"task-checkbox\"]')"
+      },
+      {
+        "role": "generic",
+        "name": "task-name",
+        "ref": null,
+        "selector": "css=[data-testid=\"task-name\"]",
+        "locators": {
+          "javascript": "locator('[data-testid=\"task-name\"]')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "taskNameGeneric",
+        "generatedLocator": "locator('[data-testid=\"task-name\"]')"
+      }
+    ]
+  }
+}

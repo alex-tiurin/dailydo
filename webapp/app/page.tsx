@@ -51,7 +51,7 @@ export default function Page() {
                 <DayCard
                   key={list.id}
                   list={list}
-                  onClick={() => router.push(`/list/${list.id}`)}
+                  onClick={() => router.push(`/list?id=${list.id}`)}
                 />
               ))}
             </div>

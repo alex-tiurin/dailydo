@@ -1,22 +1,14 @@
-/**
- * E2E Navigation Tests
- *
- * These tests run against the real running app with in-memory backend.
- * No API mocking — all requests hit the real Next.js API routes.
- *
- * Exploratory findings (2026-04-04):
- * - Delete list: no button in UI (API exists but no UI trigger)
- * - Edit task: task-edit-* button exists but has no handler (not implemented)
- * - Toggle task: fully implemented and working
- * - Empty state: requires all data cleared — not possible without API reset in e2e
- */
-import { test, expect } from '@playwright/test'
-import { MyListsPage } from '../integration/page-objects/MyListsPage'
-import { CreateListPage } from '../integration/page-objects/CreateListPage'
-import { ProgressViewPage } from '../integration/page-objects/ProgressViewPage'
+// See docs/user_stories.md — TC-N-01..TC-N-05
+//
+// E2e navigation tests against the real running app with in-memory backend.
+// No API mocking — all requests hit the real Next.js API routes.
+import { test } from '@playwright/test'
+import { MyListsPage } from '../page-objects/MyListsPage'
+import { CreateListPage } from '../page-objects/CreateListPage'
+import { ProgressViewPage } from '../page-objects/ProgressViewPage'
 
 test.describe('E2E Navigation between screens', () => {
-  test('navigates to /create when clicking + New List', async ({ page }) => {
+  test('TC-N-01: navigates to /create when clicking + New List', async ({ page }) => {
     const myLists = new MyListsPage(page)
 
     await test.step('open My Lists page', async () => {
@@ -33,18 +25,19 @@ test.describe('E2E Navigation between screens', () => {
     })
   })
 
-  test('navigates to Progress View when clicking a day card', async ({ page }) => {
+  test('TC-N-02: navigates to Progress View when clicking a day card', async ({ page }) => {
     const myLists = new MyListsPage(page)
     const createList = new CreateListPage(page)
     const progressView = new ProgressViewPage(page)
-    const listName = `Nav Card ${Date.now()}`
+    const listName = `TC-N-02 ${Date.now()}`
 
-    await test.step('create a list to ensure data exists', async () => {
+    await test.step('create a list and return to My Lists', async () => {
       await myLists.open()
       await myLists.clickNewListButton()
       await createList.fillListName(listName)
       await createList.fillTask(0, 'Nav task')
       await createList.submitList()
+      await progressView.clickBackButton()
     })
 
     await test.step('click the created day card', async () => {
@@ -57,19 +50,18 @@ test.describe('E2E Navigation between screens', () => {
     })
   })
 
-  test('navigates back to My Lists from Progress View', async ({ page }) => {
+  test('TC-N-03: navigates back to My Lists from Progress View', async ({ page }) => {
     const myLists = new MyListsPage(page)
     const createList = new CreateListPage(page)
     const progressView = new ProgressViewPage(page)
-    const listName = `Nav Back ${Date.now()}`
+    const listName = `TC-N-03 ${Date.now()}`
 
-    await test.step('create a list and open its Progress View', async () => {
+    await test.step('create a list — save lands on Progress View', async () => {
       await myLists.open()
       await myLists.clickNewListButton()
       await createList.fillListName(listName)
       await createList.fillTask(0, 'Back nav task')
       await createList.submitList()
-      await myLists.clickDayCardByName(listName)
     })
 
     await test.step('click Back button and verify navigation to My Lists', async () => {
@@ -81,11 +73,13 @@ test.describe('E2E Navigation between screens', () => {
     })
   })
 
-  test('full navigation cycle: My Lists → Create → My Lists → Progress View → My Lists', async ({ page }) => {
+  test('TC-N-04: full navigation cycle — My Lists → Create → Progress View → My Lists → Progress View → My Lists', async ({
+    page,
+  }) => {
     const myLists = new MyListsPage(page)
     const createList = new CreateListPage(page)
     const progressView = new ProgressViewPage(page)
-    const listName = `Nav Test ${Date.now()}`
+    const listName = `TC-N-04 ${Date.now()}`
 
     await test.step('open My Lists page', async () => {
       await myLists.open()
@@ -95,34 +89,34 @@ test.describe('E2E Navigation between screens', () => {
       await myLists.clickNewListButton()
     })
 
-    await test.step('fill in list name and a task, then save', async () => {
+    await test.step('fill in list name and a task, then save — lands on Progress View', async () => {
       await createList.fillListName(listName)
       await createList.fillTask(0, 'Navigation task')
       await createList.submitList()
-    })
-
-    await test.step('verify new list card is visible on My Lists', async () => {
-      await myLists.verifyDayCardWithNameVisible(listName)
-    })
-
-    await test.step('click the newly created day card', async () => {
-      await myLists.clickDayCardByName(listName)
-    })
-
-    await test.step('verify Progress View is displayed with pending tasks', async () => {
       await progressView.verifyPageVisible()
       await progressView.verifyPendingSectionVisible()
     })
 
-    await test.step('click Back and verify return to My Lists', async () => {
+    await test.step('click Back — return to My Lists and verify new card is visible', async () => {
+      await progressView.clickBackButton()
+      await myLists.verifyDayCardWithNameVisible(listName)
+    })
+
+    await test.step('click day card to open Progress View again', async () => {
+      await myLists.clickDayCardByName(listName)
+      await progressView.verifyPageVisible()
+    })
+
+    await test.step('click Back and return to My Lists', async () => {
       await progressView.clickBackButton()
       await myLists.verifyPageDidNotCrash()
     })
   })
 
-  // Empty state requires clearing all data — not possible in e2e without an API reset endpoint.
-  // The in-memory backend seeds data on startup and does not expose a reset route.
-  test.skip('navigates to /create from empty state button', async ({ page }) => {
+  // TC-N-05: empty state requires a pristine backend state, but the in-memory
+  // backend seeds data on startup and exposes no reset endpoint — so empty
+  // state is unreachable from e2e. See docs/user_stories.md.
+  test.skip('TC-N-05: navigates to /create from empty state button', async ({ page }) => {
     const myLists = new MyListsPage(page)
     await myLists.open()
     await myLists.clickCreateFirstListButton()

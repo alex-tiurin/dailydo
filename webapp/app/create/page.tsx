@@ -42,11 +42,11 @@ export default function CreatePage() {
 
     setSubmitting(true)
     try {
-      await createList({
+      const newList = await createList({
         name: listName.trim(),
         tasks: filtered.map((t) => ({ name: t.name.trim() })),
       })
-      router.push('/')
+      router.push(`/list?id=${newList.id}`)
     } finally {
       setSubmitting(false)
     }
@@ -81,14 +81,17 @@ export default function CreatePage() {
           )}
 
           <label className="text-sm font-medium mt-4 mb-2 block">Tasks</label>
-          {tasks.map((t) => (
-            <TaskForm
-              key={t.id}
-              value={t.name}
-              onChange={(v) => handleTaskChange(t.id, v)}
-              onRemove={() => handleTaskRemove(t.id)}
-            />
-          ))}
+          <div data-testid="tasks-list">
+            {tasks.map((t, index) => (
+              <TaskForm
+                key={t.id}
+                index={index}
+                value={t.name}
+                onChange={(v) => handleTaskChange(t.id, v)}
+                onRemove={() => handleTaskRemove(t.id)}
+              />
+            ))}
+          </div>
 
           <Button
             variant="ghost"

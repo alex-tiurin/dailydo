@@ -1,47 +1,68 @@
 package com.atiurin.dailydo
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.resources.painterResource
-
-import dailydo.composeapp.generated.resources.Res
-import dailydo.composeapp.generated.resources.compose_multiplatform
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.atiurin.dailydo.data.KtorTaskRepository
+import com.atiurin.dailydo.di.createHttpClient
+import com.atiurin.dailydo.network.DailyDoApiClient
+import com.atiurin.dailydo.ui.screen.CreateListScreen
+import com.atiurin.dailydo.ui.screen.MyListsScreen
+import com.atiurin.dailydo.ui.screen.ProgressScreen
+import com.atiurin.dailydo.ui.theme.DailyDoTheme
+import com.atiurin.dailydo.viewmodel.Screen
+import com.atiurin.dailydo.viewmodel.TaskListViewModel
+import androidx.lifecycle.ViewModelProvider
 
 @Composable
-@Preview
 fun App() {
-    MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .safeContentPadding()
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
+    val httpClient = createHttpClient()
+    val apiClient = DailyDoApiClient(httpClient)
+    val repository = KtorTaskRepository(apiClient)
+    val viewModel: TaskListViewModel = viewModel(
+        factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: kotlin.reflect.KClass<T>, extras: androidx.lifecycle.viewmodel.CreationExtras): T {
+                return TaskListViewModel(repository) as T
             }
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
+        }
+    )
+    val uiState by viewModel.uiState.collectAsState()
+
+    DailyDoTheme {
+        when (val screen = uiState.currentScreen) {
+            is Screen.MyLists -> {
+                MyListsScreen(
+                    taskLists = uiState.taskLists,
+                    isLoading = uiState.isLoading,
+                    error = uiState.error,
+                    completionPercentage = { list -> viewModel.completionPercentage(list) },
+                    completedCount = { list -> viewModel.completedCount(list) },
+                    onNewListClick = { viewModel.navigateToCreate() },
+                    onListClick = { listId -> viewModel.navigateToProgress(listId) },
+                    onErrorDismiss = { viewModel.clearError() }
+                )
+            }
+            is Screen.CreateList -> {
+                CreateListScreen(
+                    onSave = { name, tasks -> viewModel.createTaskList(name, tasks) },
+                    onBack = { viewModel.navigateBack() }
+                )
+            }
+            is Screen.ProgressView -> {
+                val list = uiState.taskLists.find { it.id == screen.listId }
+                if (list != null) {
+                    ProgressScreen(
+                        taskList = list,
+                        completionPercentage = viewModel.completionPercentage(list),
+                        completedCount = viewModel.completedCount(list),
+                        onBack = { viewModel.navigateBack() },
+                        onToggleTask = { taskId -> viewModel.toggleTask(list.id, taskId) },
+                        onEditTask = { taskId, newName -> viewModel.editTask(list.id, taskId, newName) }
+                    )
+                } else {
+                    viewModel.navigateBack()
                 }
             }
         }

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { mockApiLists, captureCreateListRequest, captureRequestDetails } from './helpers/mock-api'
-import { CreateListPage } from './page-objects/CreateListPage'
+import { CreateListPage } from '../page-objects/CreateListPage'
 
 const NEW_LIST_RESPONSE = {
   id: 'new-list-id',
@@ -65,7 +65,7 @@ test.describe('Create New List screen', () => {
     expect(body.tasks[0]).not.toHaveProperty('done')
   })
 
-  test('navigates to / after successful POST', async ({ page }) => {
+  test('navigates to /list?id=<newId> after successful POST', async ({ page }) => {
     const requestPromise = captureCreateListRequest(page)
     await mockApiLists(page, [NEW_LIST_RESPONSE as never])
 
@@ -75,24 +75,17 @@ test.describe('Create New List screen', () => {
     await createList.submitList()
 
     await requestPromise
+    await expect(page).toHaveURL(/\/list\?id=.+$/)
   })
 
   test('does not submit when list name is empty', async ({ page }) => {
-    let requestMade = false
-    await page.route('**/api/lists', async (route) => {
-      if (route.request().method() === 'POST') {
-        requestMade = true
-        await route.continue()
-      } else {
-        await route.continue()
-      }
-    })
+    const mock = await mockApiLists(page, [])
 
     const createList = new CreateListPage(page)
     await createList.open()
     await createList.clickSaveExpectingNoSubmit()
 
-    expect(requestMade).toBe(false)
+    expect(mock.calls).not.toContain('POST')
   })
 
   test('filters out empty tasks before submitting', async ({ page }) => {

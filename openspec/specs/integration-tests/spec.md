@@ -29,7 +29,7 @@ E2E tests SHALL verify that the Create New List form sends the correct POST requ
 E2E tests SHALL verify that toggling a task checkbox sends the correct PATCH request.
 
 #### Scenario: Toggle task sends PATCH
-- **WHEN** the test navigates to `/list/:id` with mocked tasks and clicks a pending task's checkbox
+- **WHEN** the test navigates to `/list?id=<listId>` with mocked tasks and clicks a pending task's checkbox
 - **THEN** a `PATCH /api/lists/:id/tasks/:taskId` request SHALL be sent with body `{ "done": true }`
 
 ### Requirement: Test navigation between screens
@@ -41,7 +41,7 @@ E2E tests SHALL verify correct navigation flows between screens.
 
 #### Scenario: Navigate to progress view
 - **WHEN** the test clicks on a day card
-- **THEN** the browser SHALL navigate to `/list/:id`
+- **THEN** the browser SHALL navigate to `/list?id=<listId>`
 
 #### Scenario: Navigate back from progress view
 - **WHEN** the test clicks "Back" button on Progress View

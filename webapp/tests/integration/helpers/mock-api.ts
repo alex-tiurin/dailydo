@@ -35,19 +35,48 @@ export const DEFAULT_MOCK_LISTS: MockList[] = [
   },
 ]
 
+export interface ApiListsRecorder {
+  /** All HTTP methods observed on **\/api/lists since the mock was installed */
+  calls: string[]
+}
+
 /**
  * Mock all /api/lists routes with in-memory data.
  * Must be called before page.goto().
+ *
+ * Returns a recorder whose `calls` array contains every HTTP method observed
+ * on the `**\/api/lists` endpoint — useful for asserting that a request was
+ * (or was not) made without leaking raw `page.route` calls into tests.
  */
-export async function mockApiLists(page: Page, lists: MockList[] = DEFAULT_MOCK_LISTS) {
-  // GET /api/lists
+export async function mockApiLists(
+  page: Page,
+  lists: MockList[] = DEFAULT_MOCK_LISTS
+): Promise<ApiListsRecorder> {
+  const calls: string[] = []
   await page.route('**/api/lists', async (route) => {
-    if (route.request().method() === 'GET') {
+    const method = route.request().method()
+    calls.push(method)
+    if (method === 'GET') {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
         body: JSON.stringify(lists),
       })
+    } else {
+      await route.fallback()
+    }
+  })
+  return { calls }
+}
+
+/**
+ * Mock GET /api/lists to return an HTTP error (default 500).
+ * Non-GET requests fall back to the default handler.
+ */
+export async function mockApiListsError(page: Page, status: number = 500): Promise<void> {
+  await page.route('**/api/lists', async (route) => {
+    if (route.request().method() === 'GET') {
+      await route.fulfill({ status, body: 'Internal Server Error' })
     } else {
       await route.fallback()
     }
@@ -132,6 +161,7 @@ export interface CapturedRequest {
   body: unknown
   headers: Record<string, string>
   method: string
+  url: string
 }
 
 /**
@@ -150,6 +180,7 @@ export function captureRequestDetails(
           body: route.request().postDataJSON(),
           headers: await route.request().allHeaders(),
           method: route.request().method(),
+          url: route.request().url(),
         }
         resolve(captured)
         await route.fulfill({

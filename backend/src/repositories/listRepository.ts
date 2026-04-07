@@ -127,6 +127,10 @@ export class ListRepository {
     return (result.rowCount ?? 0) > 0
   }
 
+  async clearAll(): Promise<void> {
+    await this.pool.query('TRUNCATE tasks, lists CASCADE')
+  }
+
   async updateTask(
     listId: string,
     taskId: string,

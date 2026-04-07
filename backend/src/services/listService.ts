@@ -36,6 +36,10 @@ export class ListService {
     if (!deleted) throw new NotFoundError(`List ${id} not found`)
   }
 
+  async clearAll(): Promise<void> {
+    return this.repo.clearAll()
+  }
+
   async updateTask(
     listId: string,
     taskId: string,

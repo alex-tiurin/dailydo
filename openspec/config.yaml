@@ -6,15 +6,22 @@ context: |
 
   Mobile: Kotlin 2.3.0, Compose Multiplatform 1.10.0, Material3, targets Android + iOS (minSdk 24)
   Web: React, layout width 1280px, light + dark theme, design in pencil-design.pen
-  Backend: Node.js, in-memory storage (no DB), demo only
+  Backend: Node.js, Storage - PostgresDB
+  
 
   Package: com.atiurin.dailydo
   All UI and business logic lives in commonMain; platform code is minimal wrappers only
 
 rules:
+  proposal:
+    - Always specify which platform(s) are affected (mobile / web / backend)
+  design:
+    - Include sequence diagrams for complex flows
   tasks:
     - Break tasks into chunks of max 2 hours
     - Prefer commonMain over platform-specific code
     - Follow TDD: write tests first → run and confirm they fail → implement → confirm tests pass
-  proposal:
-    - Always specify which platform(s) are affected (mobile / web / backend)
+    - After completing each task, run a CodeReview using the Opus model (claude-opus-4-6) via the Agent tool with subagent_type=general-purpose; review changed files for correctness, security, and adherence to project rules; report findings before moving to the next task
+    - Run linters if they configured
+    - Run all kind of tests at the end
+

@@ -1,0 +1,24 @@
+{
+    "targetPlatform": "ANDROID",
+    "screensPath": "ui/screens",
+    "uiBlocksPath": "ui/blocks",
+    "testsPath": "tests",
+    "recorderTestClassName": "RecorderTest",
+    "testServerDevicePort": 9095,
+    "testServerLocalPort": 9095,
+    "workDirPath": ".",
+    "gradleProjectRootPath": ".",
+    "androidConfig": {
+        "androidTestPackagePath": "composeApp/src/androidTest/kotlin",
+        "appPackage": "com.atiurin.dailydo",
+        "activityFullName": "com.atiurin.dailydo.MainActivity",
+        "androidResourcesRImport": "com.atiurin.dailydo.R",
+        "androidModule": "composeApp",
+        "gradleConnectedAndroidTestTask": ":composeApp:connectedDebugAndroidTest",
+        "gradleInstallDebugTask": ":composeApp:installDebug",
+        "gradleInstallAndroidTestTask": ":composeApp:installDebugAndroidTest",
+        "screenMirroringSource": "stream",
+        "useUnmergedTree": true
+    },
+    "strictPageObjectMode": true
+}

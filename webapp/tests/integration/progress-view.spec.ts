@@ -6,7 +6,7 @@ import {
   captureRequestDetails,
   DEFAULT_MOCK_LISTS,
 } from './helpers/mock-api'
-import { ProgressViewPage } from './page-objects/ProgressViewPage'
+import { ProgressViewPage } from '../page-objects/ProgressViewPage'
 
 const LIST = DEFAULT_MOCK_LISTS[1] // Thursday Sprint: task-2-1 pending, task-2-2 done
 const pendingTask = LIST.tasks.find((t) => !t.done)!
@@ -28,7 +28,7 @@ test.describe('Progress View screen', () => {
 
     const progressView = new ProgressViewPage(page)
     await progressView.open(LIST.id)
-    await progressView.clickTaskCheckbox(pendingTask.id)
+    await progressView.clickTaskCheckbox(pendingTask.name)
 
     const body = await requestPromise
     expect(body).toEqual({ done: true })
@@ -42,7 +42,7 @@ test.describe('Progress View screen', () => {
 
     const progressView = new ProgressViewPage(page)
     await progressView.open(LIST.id)
-    await progressView.clickTaskCheckbox(completedTask.id)
+    await progressView.clickTaskCheckbox(completedTask.name)
 
     const body = await requestPromise
     expect(body).toEqual({ done: false })
@@ -51,22 +51,19 @@ test.describe('Progress View screen', () => {
   // --- PATCH HTTP details ---
 
   test('PATCH request targets correct URL with listId and taskId', async ({ page }) => {
-    let capturedUrl = ''
-    await page.route(`**/api/lists/${LIST.id}/tasks/${pendingTask.id}`, async (route) => {
-      capturedUrl = route.request().url()
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({ ...pendingTask, done: true }),
-      })
-    })
+    const requestPromise = captureRequestDetails(
+      page,
+      `**/api/lists/${LIST.id}/tasks/${pendingTask.id}`,
+      'PATCH',
+      { status: 200, body: { ...pendingTask, done: true } }
+    )
 
     const progressView = new ProgressViewPage(page)
     await progressView.open(LIST.id)
-    await progressView.clickTaskCheckbox(pendingTask.id)
+    await progressView.clickTaskCheckbox(pendingTask.name)
 
-    await page.waitForTimeout(500)
-    expect(capturedUrl).toContain(`/api/lists/${LIST.id}/tasks/${pendingTask.id}`)
+    const { url } = await requestPromise
+    expect(url).toContain(`/api/lists/${LIST.id}/tasks/${pendingTask.id}`)
   })
 
   test('PATCH request sends Content-Type: application/json', async ({ page }) => {
@@ -79,7 +76,7 @@ test.describe('Progress View screen', () => {
 
     const progressView = new ProgressViewPage(page)
     await progressView.open(LIST.id)
-    await progressView.clickTaskCheckbox(pendingTask.id)
+    await progressView.clickTaskCheckbox(pendingTask.name)
 
     const { headers, method } = await requestPromise
     expect(method).toBe('PATCH')
@@ -89,17 +86,7 @@ test.describe('Progress View screen', () => {
   // --- Error handling ---
 
   test('redirects to / when list id is not found in context', async ({ page }) => {
-    await page.route('**/api/lists', async (route) => {
-      if (route.request().method() === 'GET') {
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify([]),
-        })
-      } else {
-        await route.continue()
-      }
-    })
+    await mockApiLists(page, [])
 
     const progressView = new ProgressViewPage(page)
     await progressView.attemptOpen('non-existent-id')
@@ -119,7 +106,7 @@ test.describe('Progress View screen', () => {
     await progressView.open(LIST.id)
 
     for (const task of LIST.tasks) {
-      await progressView.verifyTaskVisible(task.id)
+      await progressView.verifyTaskVisible(task.name)
     }
   })
 

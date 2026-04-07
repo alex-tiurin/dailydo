@@ -25,7 +25,8 @@ export function DayCard({ list, onClick }: DayCardProps) {
 
   return (
     <div
-      data-testid={`day-card-${list.id}`}
+      data-testid="day-card"
+      aria-label={list.name}
       className="cursor-pointer py-4 border-b border-[var(--divider)]"
       onClick={onClick}
     >
@@ -43,11 +44,16 @@ export function DayCard({ list, onClick }: DayCardProps) {
       </div>
 
       {/* Row 2: list name */}
-      <p className="text-lg font-semibold text-foreground mt-1">{list.name}</p>
+      <p
+        data-testid="day-card-list-name"
+        className="text-lg font-semibold text-foreground mt-1"
+      >
+        {list.name}
+      </p>
 
       {/* Row 3: progress bar */}
       <div
-        data-testid={`day-card-progress-${list.id}`}
+        data-testid="day-card-progress"
         className="w-full h-1 bg-[var(--divider)] rounded-full mt-2"
       >
         <div

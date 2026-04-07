@@ -1,0 +1,230 @@
+{
+  "version": 1,
+  "name": "create",
+  "domain": "localhost_3000",
+  "path": "/create",
+  "fullUrl": "http://localhost:3000/create",
+  "createdAt": "2026-04-19T12:28:43.611Z",
+  "updatedAt": "2026-04-19T13:46:19.031Z",
+  "tree": {
+    "url": "http://localhost:3000/create",
+    "title": "DailyDo",
+    "elements": [
+      {
+        "role": "button",
+        "name": "Open Next.js Dev Tools",
+        "ref": "e192",
+        "selector": "internal:role=button[name=\"Open Next.js Dev Tools\"i]",
+        "locators": {
+          "javascript": "getByRole('button', { name: 'Open Next.js Dev Tools' })"
+        },
+        "actions": [
+          "click"
+        ],
+        "attributes": {},
+        "children": [],
+        "propertyName": "openNextJsDevToolsButton",
+        "generatedLocator": "getByRole('button', { name: 'Open Next.js Dev Tools' })"
+      },
+      {
+        "role": "alert",
+        "name": "",
+        "ref": "e196",
+        "selector": "[id=\"__next-route-announcer__\"]",
+        "locators": {
+          "javascript": "locator('[id=\"__next-route-announcer__\"]')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "alert",
+        "generatedLocator": "locator('[id=\"__next-route-announcer__\"]')"
+      },
+      {
+        "role": "navigation",
+        "name": "",
+        "ref": "e198",
+        "selector": "internal:testid=[data-testid=\"navbar\"s]",
+        "locators": {
+          "javascript": "getByTestId('navbar')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "navigation",
+        "generatedLocator": "getByTestId('navbar')"
+      },
+      {
+        "role": "main",
+        "name": "",
+        "ref": "e202",
+        "selector": "internal:testid=[data-testid=\"create-list-page\"s]",
+        "locators": {
+          "javascript": "getByTestId('create-list-page')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [
+          {
+            "role": "heading",
+            "name": "Create New List",
+            "ref": "e204",
+            "selector": "internal:role=heading[name=\"Create New List\"i]",
+            "locators": {
+              "javascript": "getByRole('heading', { name: 'Create New List' })"
+            },
+            "actions": [],
+            "attributes": {
+              "level": 1
+            },
+            "children": [],
+            "propertyName": "createNewListHeading",
+            "generatedLocator": "getByRole('heading', { name: 'Create New List' })"
+          },
+          {
+            "role": "textbox",
+            "name": "Morning Routine",
+            "ref": "e207",
+            "selector": "internal:testid=[data-testid=\"list-name-input\"s]",
+            "locators": {
+              "javascript": "getByTestId('list-name-input')"
+            },
+            "actions": [
+              "fill",
+              "clear",
+              "click"
+            ],
+            "attributes": {},
+            "children": [],
+            "propertyName": "morningRoutineTextbox",
+            "generatedLocator": "getByTestId('list-name-input')"
+          },
+          {
+            "role": "textbox",
+            "name": "Task 1 name",
+            "ref": "e212",
+            "selector": "internal:testid=[data-testid=\"task-form-input\"s]",
+            "locators": {
+              "javascript": "getByTestId('task-form-input')"
+            },
+            "actions": [
+              "fill",
+              "clear",
+              "click"
+            ],
+            "attributes": {},
+            "children": [],
+            "propertyName": "task1NameTextbox",
+            "generatedLocator": "getByTestId('task-form-input')"
+          },
+          {
+            "role": "button",
+            "name": "Remove task 1",
+            "ref": "e213",
+            "selector": "internal:testid=[data-testid=\"task-form-remove\"s]",
+            "locators": {
+              "javascript": "getByTestId('task-form-remove')"
+            },
+            "actions": [
+              "click"
+            ],
+            "attributes": {},
+            "children": [],
+            "propertyName": "removeTask1Button",
+            "generatedLocator": "getByTestId('task-form-remove')"
+          },
+          {
+            "role": "button",
+            "name": "Add task",
+            "ref": "e214",
+            "selector": "internal:testid=[data-testid=\"add-task-button\"s]",
+            "locators": {
+              "javascript": "getByTestId('add-task-button')"
+            },
+            "actions": [
+              "click"
+            ],
+            "attributes": {},
+            "children": [],
+            "propertyName": "addTaskButton",
+            "generatedLocator": "getByTestId('add-task-button')"
+          },
+          {
+            "role": "button",
+            "name": "Save List",
+            "ref": "e215",
+            "selector": "internal:testid=[data-testid=\"save-list-button\"s]",
+            "locators": {
+              "javascript": "getByTestId('save-list-button')"
+            },
+            "actions": [
+              "click"
+            ],
+            "attributes": {},
+            "children": [],
+            "propertyName": "saveListButton",
+            "generatedLocator": "getByTestId('save-list-button')"
+          }
+        ],
+        "propertyName": "main",
+        "generatedLocator": "getByTestId('create-list-page')"
+      },
+      {
+        "role": "generic",
+        "name": "navbar-logo",
+        "ref": null,
+        "selector": "css=[data-testid=\"navbar-logo\"]",
+        "locators": {
+          "javascript": "locator('[data-testid=\"navbar-logo\"]')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "navbarLogoGeneric",
+        "generatedLocator": "locator('[data-testid=\"navbar-logo\"]')"
+      },
+      {
+        "role": "generic",
+        "name": "navbar-avatar",
+        "ref": null,
+        "selector": "css=[data-testid=\"navbar-avatar\"]",
+        "locators": {
+          "javascript": "locator('[data-testid=\"navbar-avatar\"]')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "navbarAvatarGeneric",
+        "generatedLocator": "locator('[data-testid=\"navbar-avatar\"]')"
+      },
+      {
+        "role": "generic",
+        "name": "tasks-list",
+        "ref": null,
+        "selector": "css=[data-testid=\"tasks-list\"]",
+        "locators": {
+          "javascript": "locator('[data-testid=\"tasks-list\"]')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "tasksListGeneric",
+        "generatedLocator": "locator('[data-testid=\"tasks-list\"]')"
+      },
+      {
+        "role": "generic",
+        "name": "task-form-item",
+        "ref": null,
+        "selector": "css=[data-testid=\"task-form-item\"]",
+        "locators": {
+          "javascript": "locator('[data-testid=\"task-form-item\"]')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "taskFormItemGeneric",
+        "generatedLocator": "locator('[data-testid=\"task-form-item\"]')"
+      }
+    ]
+  }
+}

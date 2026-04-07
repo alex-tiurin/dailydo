@@ -1,0 +1,402 @@
+{
+  "version": 1,
+  "name": "home",
+  "domain": "localhost_3000",
+  "path": "/",
+  "fullUrl": "http://localhost:3000/",
+  "createdAt": "2026-04-19T13:40:36.180Z",
+  "updatedAt": "2026-04-19T13:46:19.029Z",
+  "tree": {
+    "url": "http://localhost:3000/",
+    "title": "DailyDo",
+    "elements": [
+      {
+        "role": "button",
+        "name": "Open Next.js Dev Tools",
+        "ref": "e192",
+        "selector": "internal:role=button[name=\"Open Next.js Dev Tools\"i]",
+        "locators": {
+          "javascript": "getByRole('button', { name: 'Open Next.js Dev Tools' })"
+        },
+        "actions": [
+          "click"
+        ],
+        "attributes": {},
+        "children": [],
+        "propertyName": "openNextJsDevToolsButton",
+        "generatedLocator": "getByRole('button', { name: 'Open Next.js Dev Tools' })"
+      },
+      {
+        "role": "alert",
+        "name": "",
+        "ref": "e196",
+        "selector": "[id=\"__next-route-announcer__\"]",
+        "locators": {
+          "javascript": "locator('[id=\"__next-route-announcer__\"]')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "alert",
+        "generatedLocator": "locator('[id=\"__next-route-announcer__\"]')"
+      },
+      {
+        "role": "navigation",
+        "name": "",
+        "ref": "e237",
+        "selector": "internal:testid=[data-testid=\"navbar\"s]",
+        "locators": {
+          "javascript": "getByTestId('navbar')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "navigation",
+        "generatedLocator": "getByTestId('navbar')"
+      },
+      {
+        "role": "main",
+        "name": "",
+        "ref": "e241",
+        "selector": "internal:testid=[data-testid=\"my-lists-page\"s]",
+        "locators": {
+          "javascript": "getByTestId('my-lists-page')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [
+          {
+            "role": "heading",
+            "name": "My Lists",
+            "ref": "e244",
+            "selector": "internal:role=heading[name=\"My Lists\"i]",
+            "locators": {
+              "javascript": "getByRole('heading', { name: 'My Lists' })"
+            },
+            "actions": [],
+            "attributes": {
+              "level": 1
+            },
+            "children": [],
+            "propertyName": "myListsHeading",
+            "generatedLocator": "getByRole('heading', { name: 'My Lists' })"
+          },
+          {
+            "role": "button",
+            "name": "+ New List",
+            "ref": "e246",
+            "selector": "internal:testid=[data-testid=\"new-list-button\"s]",
+            "locators": {
+              "javascript": "getByTestId('new-list-button')"
+            },
+            "actions": [
+              "click"
+            ],
+            "attributes": {},
+            "children": [],
+            "propertyName": "newListButton",
+            "generatedLocator": "getByTestId('new-list-button')"
+          },
+          {
+            "role": "img",
+            "name": "",
+            "ref": "e251",
+            "selector": "svg >> nth=0",
+            "locators": {
+              "javascript": "locator('svg').first()"
+            },
+            "actions": [],
+            "attributes": {},
+            "children": [],
+            "propertyName": "img",
+            "generatedLocator": "locator('svg').first()"
+          },
+          {
+            "role": "button",
+            "name": "Toggle progress overview",
+            "ref": "e257",
+            "selector": "internal:testid=[data-testid=\"progress-overview-toggle\"s]",
+            "locators": {
+              "javascript": "getByTestId('progress-overview-toggle')"
+            },
+            "actions": [
+              "click"
+            ],
+            "attributes": {},
+            "children": [],
+            "propertyName": "toggleProgressOverviewButton",
+            "generatedLocator": "getByTestId('progress-overview-toggle')"
+          },
+          {
+            "role": "img",
+            "name": "",
+            "ref": "e292",
+            "selector": "internal:label=\"TC-L-01 DailyDo List\"i >> svg",
+            "locators": {
+              "javascript": "getByLabel('TC-L-01 DailyDo List').locator('svg')"
+            },
+            "actions": [],
+            "attributes": {},
+            "children": [],
+            "propertyName": "img2",
+            "generatedLocator": "getByLabel('TC-L-01 DailyDo List').locator('svg')"
+          },
+          {
+            "role": "img",
+            "name": "",
+            "ref": "e302",
+            "selector": "internal:label=\"sdf\"i >> svg",
+            "locators": {
+              "javascript": "getByLabel('sdf').locator('svg')"
+            },
+            "actions": [],
+            "attributes": {},
+            "children": [],
+            "propertyName": "img3",
+            "generatedLocator": "getByLabel('sdf').locator('svg')"
+          },
+          {
+            "role": "img",
+            "name": "",
+            "ref": "e312",
+            "selector": "internal:label=\"Assertum TC-L-\"i >> svg",
+            "locators": {
+              "javascript": "getByLabel('Assertum TC-L-').locator('svg')"
+            },
+            "actions": [],
+            "attributes": {},
+            "children": [],
+            "propertyName": "img4",
+            "generatedLocator": "getByLabel('Assertum TC-L-').locator('svg')"
+          },
+          {
+            "role": "img",
+            "name": "",
+            "ref": "e322",
+            "selector": "svg >> nth=5",
+            "locators": {
+              "javascript": "locator('svg').nth(5)"
+            },
+            "actions": [],
+            "attributes": {},
+            "children": [],
+            "propertyName": "img5",
+            "generatedLocator": "locator('svg').nth(5)"
+          },
+          {
+            "role": "img",
+            "name": "",
+            "ref": "e333",
+            "selector": "div:nth-child(5) > .flex.justify-between > .flex > .lucide",
+            "locators": {
+              "javascript": "locator('div:nth-child(5) > .flex.justify-between > .flex > .lucide')"
+            },
+            "actions": [],
+            "attributes": {},
+            "children": [],
+            "propertyName": "img6",
+            "generatedLocator": "locator('div:nth-child(5) > .flex.justify-between > .flex > .lucide')"
+          },
+          {
+            "role": "img",
+            "name": "",
+            "ref": "e344",
+            "selector": "div:nth-child(6) > .flex.justify-between > .flex > .lucide",
+            "locators": {
+              "javascript": "locator('div:nth-child(6) > .flex.justify-between > .flex > .lucide')"
+            },
+            "actions": [],
+            "attributes": {},
+            "children": [],
+            "propertyName": "img7",
+            "generatedLocator": "locator('div:nth-child(6) > .flex.justify-between > .flex > .lucide')"
+          },
+          {
+            "role": "img",
+            "name": "",
+            "ref": "e354",
+            "selector": "div:nth-child(7) > .flex.justify-between > .flex > .lucide",
+            "locators": {
+              "javascript": "locator('div:nth-child(7) > .flex.justify-between > .flex > .lucide')"
+            },
+            "actions": [],
+            "attributes": {},
+            "children": [],
+            "propertyName": "img8",
+            "generatedLocator": "locator('div:nth-child(7) > .flex.justify-between > .flex > .lucide')"
+          },
+          {
+            "role": "img",
+            "name": "",
+            "ref": "e365",
+            "selector": "div:nth-child(8) > .flex.justify-between > .flex > .lucide",
+            "locators": {
+              "javascript": "locator('div:nth-child(8) > .flex.justify-between > .flex > .lucide')"
+            },
+            "actions": [],
+            "attributes": {},
+            "children": [],
+            "propertyName": "img9",
+            "generatedLocator": "locator('div:nth-child(8) > .flex.justify-between > .flex > .lucide')"
+          },
+          {
+            "role": "img",
+            "name": "",
+            "ref": "e375",
+            "selector": "div:nth-child(9) > .flex.justify-between > .flex > .lucide",
+            "locators": {
+              "javascript": "locator('div:nth-child(9) > .flex.justify-between > .flex > .lucide')"
+            },
+            "actions": [],
+            "attributes": {},
+            "children": [],
+            "propertyName": "img10",
+            "generatedLocator": "locator('div:nth-child(9) > .flex.justify-between > .flex > .lucide')"
+          },
+          {
+            "role": "img",
+            "name": "",
+            "ref": "e386",
+            "selector": "div:nth-child(10) > .flex.justify-between > .flex > .lucide",
+            "locators": {
+              "javascript": "locator('div:nth-child(10) > .flex.justify-between > .flex > .lucide')"
+            },
+            "actions": [],
+            "attributes": {},
+            "children": [],
+            "propertyName": "img11",
+            "generatedLocator": "locator('div:nth-child(10) > .flex.justify-between > .flex > .lucide')"
+          },
+          {
+            "role": "img",
+            "name": "",
+            "ref": "e396",
+            "selector": "div:nth-child(11) > .flex.justify-between > .flex > .lucide",
+            "locators": {
+              "javascript": "locator('div:nth-child(11) > .flex.justify-between > .flex > .lucide')"
+            },
+            "actions": [],
+            "attributes": {},
+            "children": [],
+            "propertyName": "img12",
+            "generatedLocator": "locator('div:nth-child(11) > .flex.justify-between > .flex > .lucide')"
+          },
+          {
+            "role": "img",
+            "name": "",
+            "ref": "e406",
+            "selector": "div:nth-child(12) > .flex.justify-between > .flex > .lucide",
+            "locators": {
+              "javascript": "locator('div:nth-child(12) > .flex.justify-between > .flex > .lucide')"
+            },
+            "actions": [],
+            "attributes": {},
+            "children": [],
+            "propertyName": "img13",
+            "generatedLocator": "locator('div:nth-child(12) > .flex.justify-between > .flex > .lucide')"
+          },
+          {
+            "role": "img",
+            "name": "",
+            "ref": "e416",
+            "selector": "div:nth-child(13) > .flex.justify-between > .flex > .lucide",
+            "locators": {
+              "javascript": "locator('div:nth-child(13) > .flex.justify-between > .flex > .lucide')"
+            },
+            "actions": [],
+            "attributes": {},
+            "children": [],
+            "propertyName": "img14",
+            "generatedLocator": "locator('div:nth-child(13) > .flex.justify-between > .flex > .lucide')"
+          },
+          {
+            "role": "img",
+            "name": "",
+            "ref": "e426",
+            "selector": "div:nth-child(14) > .flex.justify-between > .flex > .lucide",
+            "locators": {
+              "javascript": "locator('div:nth-child(14) > .flex.justify-between > .flex > .lucide')"
+            },
+            "actions": [],
+            "attributes": {},
+            "children": [],
+            "propertyName": "img15",
+            "generatedLocator": "locator('div:nth-child(14) > .flex.justify-between > .flex > .lucide')"
+          }
+        ],
+        "propertyName": "main",
+        "generatedLocator": "getByTestId('my-lists-page')"
+      },
+      {
+        "role": "generic",
+        "name": "navbar-logo",
+        "ref": null,
+        "selector": "css=[data-testid=\"navbar-logo\"]",
+        "locators": {
+          "javascript": "locator('[data-testid=\"navbar-logo\"]')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "navbarLogoGeneric",
+        "generatedLocator": "locator('[data-testid=\"navbar-logo\"]')"
+      },
+      {
+        "role": "generic",
+        "name": "navbar-avatar",
+        "ref": null,
+        "selector": "css=[data-testid=\"navbar-avatar\"]",
+        "locators": {
+          "javascript": "locator('[data-testid=\"navbar-avatar\"]')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "navbarAvatarGeneric",
+        "generatedLocator": "locator('[data-testid=\"navbar-avatar\"]')"
+      },
+      {
+        "role": "generic",
+        "name": "progress-overview",
+        "ref": null,
+        "selector": "css=[data-testid=\"progress-overview\"]",
+        "locators": {
+          "javascript": "locator('[data-testid=\"progress-overview\"]')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "progressOverviewGeneric",
+        "generatedLocator": "locator('[data-testid=\"progress-overview\"]')"
+      },
+      {
+        "role": "generic",
+        "name": "progress-overview-chart",
+        "ref": null,
+        "selector": "css=[data-testid=\"progress-overview-chart\"]",
+        "locators": {
+          "javascript": "locator('[data-testid=\"progress-overview-chart\"]')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "progressOverviewChartGeneric",
+        "generatedLocator": "locator('[data-testid=\"progress-overview-chart\"]')"
+      },
+      {
+        "role": "generic",
+        "name": "lists-container",
+        "ref": null,
+        "selector": "css=[data-testid=\"lists-container\"]",
+        "locators": {
+          "javascript": "locator('[data-testid=\"lists-container\"]')"
+        },
+        "actions": [],
+        "attributes": {},
+        "children": [],
+        "propertyName": "listsContainerGeneric",
+        "generatedLocator": "locator('[data-testid=\"lists-container\"]')"
+      }
+    ]
+  }
+}

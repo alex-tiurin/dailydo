@@ -20,3 +20,4 @@ node_modules/
 .plawright-cli/
 webapp/.playwright-cli/my-lists.png
 /webapp/.playwright-cli
+.playwright-cli/

@@ -8,7 +8,7 @@ The app SHALL display a top navigation bar on every screen with the "DailyDo" lo
 - **THEN** the navbar SHALL display "DailyDo" logo on the left and user avatar on the right
 
 #### Scenario: Navbar renders on Progress View
-- **WHEN** user navigates to `/list/:id`
+- **WHEN** user navigates to `/list?id=<listId>`
 - **THEN** the same navbar SHALL be visible at the top
 
 ### Requirement: My Lists screen displays day cards
@@ -24,7 +24,7 @@ The main screen at `/` SHALL display a heading "My Lists" with the current date 
 
 #### Scenario: Navigate to progress view
 - **WHEN** user clicks on a day card or its edit icon
-- **THEN** the app SHALL navigate to `/list/:id`
+- **THEN** the app SHALL navigate to `/list?id=<listId>` (the list identifier is passed as the `id` query parameter)
 
 ### Requirement: Progress Overview widget
 The My Lists screen SHALL display a collapsible "Progress Overview" widget below the heading. The widget shows a bar chart of the last N days with gray bars (total tasks) and green fill (completed tasks), day labels (Mon, Tue, etc.), and a summary label "X/Y tasks done".
@@ -61,14 +61,18 @@ The `/create` route SHALL display a centered card (Surface background, 12dp radi
 
 #### Scenario: Save list
 - **WHEN** user fills in the list name, adds tasks, and clicks "Save List"
-- **THEN** the app SHALL send a POST request to `/api/lists` with `{ name, tasks: [{ name }] }` and navigate to `/` on success
+- **THEN** the app SHALL send a POST request to `/api/lists` with `{ name, tasks: [{ name }] }` and, on success, navigate to `/list?id=<newListId>` (Progress View of the freshly created list)
+
+#### Scenario: Save list with no tasks
+- **WHEN** user fills in only the list name (all task rows empty) and clicks "Save List"
+- **THEN** the app SHALL send a POST request to `/api/lists` with `{ name, tasks: [] }` and navigate to `/list?id=<newListId>`; Progress View SHALL render with empty "Pending 0" and "Completed 0" sections
 
 #### Scenario: Validation prevents empty save
 - **WHEN** user clicks "Save List" without entering a list name
 - **THEN** the form SHALL NOT submit and SHALL indicate the name is required
 
 ### Requirement: Progress View screen
-The `/list/:id` route SHALL display the list detail with a top bar containing "Back" button (left) and "X/Y done" counter + edit icon (right), the list name as heading, date below, and two sections: "Pending" and "Completed".
+The `/list` route (Progress View) SHALL read the target list identifier from the `id` query parameter (e.g. `/list?id=<listId>`) and display the list detail with a top bar containing "Back" button (left) and "X/Y done" counter + edit icon (right), the list name as heading, date below, and two sections: "Pending" and "Completed".
 
 #### Scenario: Tasks split into sections
 - **WHEN** the list loads with tasks

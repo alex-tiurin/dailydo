@@ -1,22 +1,19 @@
-/**
- * E2E List (Day) CRUD Tests
- *
- * Tests run against the real running app with in-memory backend (no API mocking).
- *
- * Exploratory findings (2026-04-04):
- * - Delete list: API (DELETE /api/lists/:id) is implemented, but NO UI button exists.
- *   The pencil icon on DayCard is a decorative img with no onClick handler.
- *   Delete tests are skipped until a UI trigger is added.
- */
-import { test, expect } from '@playwright/test'
-import { MyListsPage } from '../integration/page-objects/MyListsPage'
-import { CreateListPage } from '../integration/page-objects/CreateListPage'
+// See docs/user_stories.md — TC-L-01..TC-L-04
+//
+// E2e List (Day) CRUD tests against the real running app with in-memory backend
+// (no API mocking). Tests are independent: each creates a list with a unique
+// timestamp-based name to avoid collisions under parallel workers.
+import { test } from '@playwright/test'
+import { MyListsPage } from '../page-objects/MyListsPage'
+import { CreateListPage } from '../page-objects/CreateListPage'
+import { ProgressViewPage } from '../page-objects/ProgressViewPage'
 
 test.describe('E2E List (Day) CRUD', () => {
-  test('creates a new list and verifies card appears on My Lists', async ({ page }) => {
+  test('TC-L-01: creates a new list and verifies card appears on My Lists', async ({ page }) => {
     const myLists = new MyListsPage(page)
     const createList = new CreateListPage(page)
-    const listName = `New Day ${Date.now()}`
+    const progressView = new ProgressViewPage(page)
+    const listName = `TC-L-01 ${Date.now()}`
 
     await test.step('open My Lists page', async () => {
       await myLists.open()
@@ -32,12 +29,13 @@ test.describe('E2E List (Day) CRUD', () => {
       await createList.submitList()
     })
 
-    await test.step('verify new day card is visible on My Lists', async () => {
+    await test.step('return to My Lists and verify new day card is visible', async () => {
+      await progressView.clickBackButton()
       await myLists.verifyDayCardWithNameVisible(listName)
     })
   })
 
-  test('shows validation error when saving a list with empty name', async ({ page }) => {
+  test('TC-L-02: shows validation error when saving a list with empty name', async ({ page }) => {
     const myLists = new MyListsPage(page)
     const createList = new CreateListPage(page)
 
@@ -56,14 +54,14 @@ test.describe('E2E List (Day) CRUD', () => {
     })
   })
 
-  // Delete list: the API endpoint (DELETE /api/lists/:id) exists and is functional,
-  // but there is NO delete button in the UI as of exploratory testing (2026-04-04).
-  // The pencil icon on DayCard is a decorative img element without an onClick handler.
-  // These tests are skipped until a delete UI trigger is implemented.
-  test.skip('deletes a list and verifies card disappears from My Lists', async ({ page }) => {
+  // TC-L-03: DELETE /api/lists/:id is implemented on the backend, but the UI has
+  // no delete trigger — the pencil icon on DayCard is a decorative img with no
+  // onClick handler (confirmed during exploratory testing, see docs/user_stories.md).
+  // Activate when a delete UI is added.
+  test.skip('TC-L-03: deletes a list and verifies card disappears from My Lists', async ({ page }) => {
     const myLists = new MyListsPage(page)
     const createList = new CreateListPage(page)
-    const listName = `Delete Me ${Date.now()}`
+    const listName = `TC-L-03 ${Date.now()}`
 
     await test.step('create a list to delete', async () => {
       await myLists.open()
@@ -74,8 +72,7 @@ test.describe('E2E List (Day) CRUD', () => {
     })
 
     await test.step('delete the list via UI', async () => {
-      // TODO: implement when delete button is added to DayCard or context menu
-      // await myLists.deleteList(listName)
+      // Pending: no UI trigger for delete yet.
     })
 
     await test.step('verify list card is no longer visible', async () => {
@@ -83,12 +80,14 @@ test.describe('E2E List (Day) CRUD', () => {
     })
   })
 
-  // Also skipped — requires delete to be implemented first
-  test.skip('shows empty state after deleting the last list', async ({ page }) => {
+  // TC-L-04: depends on TC-L-03 (delete) plus a backend reset endpoint to
+  // guarantee empty state. The in-memory backend seeds on startup and exposes
+  // no reset route, so empty state is unreachable from e2e. See docs/user_stories.md.
+  test.skip('TC-L-04: shows empty state after deleting the last list', async ({ page }) => {
     const myLists = new MyListsPage(page)
 
     await test.step('ensure only one list exists and delete it', async () => {
-      // Requires delete UI to be implemented
+      // Requires delete UI + backend reset.
     })
 
     await test.step('verify empty state is shown', async () => {

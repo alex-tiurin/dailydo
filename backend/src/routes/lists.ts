@@ -92,6 +92,16 @@ export async function listsRoutes(
     },
   )
 
+  // DELETE /api/lists
+  app.delete('/api/lists', async (_req, reply) => {
+    try {
+      await service.clearAll()
+      reply.status(204).send()
+    } catch (err) {
+      handleError(err, reply)
+    }
+  })
+
   // DELETE /api/lists/:id
   app.delete(
     '/api/lists/:id',

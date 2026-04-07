@@ -135,13 +135,29 @@ export class MyListsPage {
     await this.dayCard(listId).click();
     await expect(this.page).toHaveURL(new RegExp(`.*lists/${listId}`));
   }
+
+  // --- E2e extensions (no API mocking, real backend) ---
+  // For e2e tests where backend-generated IDs are unknown to the test.
+  // Locate by visible text inside the testid-prefixed container.
+
+  dayCardByName(name: string): Locator {
+    return this.page.locator('[data-testid^="day-card-"]').filter({ hasText: name });
+  }
+
+  async verifyDayCardWithNameVisible(name: string): Promise<void> {
+    await expect(this.dayCardByName(name)).toBeVisible();
+  }
 }
 ```
 
+Add the `// --- E2e extensions ---` section only when the page is exercised by e2e tests that cannot rely on backend-generated IDs. See `webapp/tests/page-objects/MyListsPage.ts:104-125` for the canonical example.
+
 ## File Organization
 
+In this project, the Playwright tests root is `webapp/tests/`:
+
 ```
-tests/
+webapp/tests/
 ├── page-objects/           # All Page Object classes
 │   ├── MyListsPage.ts
 │   ├── CreateListPage.ts
@@ -149,15 +165,41 @@ tests/
 ├── integration/
 │   ├── helpers/
 │   │   └── mock-api.ts     # API mocking utilities (unchanged)
-│   ├── my-lists.spec.ts    # Tests using Page Objects
+│   ├── my-lists.spec.ts    # Integration tests with mocks
 │   ├── create-list.spec.ts
 │   └── navigation.spec.ts
-└── e2e/
+└── e2e/                    # E2e tests against real backend
+    ├── list-crud.spec.ts
+    └── task-crud.spec.ts
 ```
 
-- Page Objects live in `tests/page-objects/` — one file per page/screen
-- Test files import Page Objects and helpers, nothing else from Playwright except `test` and `expect` (for top-level test structure only)
-- Mock/API helpers stay in `helpers/` — they are infrastructure, not user actions
+- Page Objects live in `webapp/tests/page-objects/` — one file per page/screen.
+- Test files import Page Objects and helpers, nothing else from `@playwright/test` except `test` and `expect`.
+- Mock/API helpers stay in `helpers/` — they are infrastructure, not user actions.
+
+## Integration vs E2e: when to use `test.step`
+
+Two test styles exist in this project, with different narrative structures:
+
+| | Integration (`tests/integration/`) | E2e (`tests/e2e/`) |
+|---|---|---|
+| Backend | mocked via `helpers/mock-api.ts` | real running app |
+| Length | 2–5 Step calls | 5–15 Step calls across phases |
+| `test.step` wrapper | **No** — flat sequence of Step calls | **Yes** — wrap each logical phase |
+
+E2e example (from `webapp/tests/e2e/list-crud.spec.ts`):
+
+```ts
+await test.step('open My Lists page', async () => { await myLists.open() })
+await test.step('navigate to Create New List', async () => { await myLists.clickNewListButton() })
+await test.step('fill list name and a task, then save', async () => {
+  await createList.fillListName(listName)
+  await createList.fillTask(0, 'Sample task')
+  await createList.submitList()
+})
+```
+
+`test.step` is **only** a narrative wrapper for the Playwright HTML report. It does **not** replace verification inside Step methods. Never put `page.click(...)` inside a `test.step` and call it done.
 
 ## When Converting Existing Tests
 
@@ -240,3 +282,38 @@ When using `playwright-cli` to record browser interactions and generate test cod
 4. Write the test using only Step calls
 
 Never commit tests with raw generated code — always refactor into Steps first.
+
+## Output contract
+
+When you finish a task that involved writing or refactoring tests under this skill, your final reply MUST include all three of these sections, in this order:
+
+### 1. Files
+
+List every Page Object and `.spec.ts` file you created or edited, with absolute paths.
+
+### 2. Steps table
+
+For each Page Object touched, a markdown table:
+
+| Page Object | Step | Action | Verification |
+|---|---|---|---|
+| MyListsPage | clickNewListButton | clicks "New List" button | URL becomes `/create` |
+
+### 3. Validator result
+
+Run the validator and paste its output:
+
+```
+bash .claude/skills/playwright-page-object/scripts/validate.sh webapp/tests
+```
+
+If `PASS`, say so. If `FAIL`, list every violation. Do NOT silently fix unrelated pre-existing violations — only fix violations in code you touched. Report pre-existing ones separately.
+
+## Resources
+
+- [templates/PageObject.template.ts](templates/PageObject.template.ts) — skeleton for new Page Objects (4 sections: Locators / Action Steps / Verification Steps / E2e extensions)
+- [templates/test.template.spec.ts](templates/test.template.spec.ts) — skeletons for both integration (no `test.step`) and e2e (with `test.step`) tests
+- [references/thinking.md](references/thinking.md) — 10-step algorithm for refactoring raw tests into POM
+- [references/anti-patterns.md](references/anti-patterns.md) — WRONG → RIGHT catalog with rationale
+- [references/raw-to-pom.md](references/raw-to-pom.md) — two worked refactorings (one integration, one e2e) drawn from this repo
+- [scripts/validate.sh](scripts/validate.sh) — bash validator: raw `page.*` in tests, missing `expect(` in Step methods, forbidden imports

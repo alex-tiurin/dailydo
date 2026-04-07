@@ -1,8 +1,8 @@
 import { test } from '@playwright/test'
 import { mockApiLists, mockApiList, DEFAULT_MOCK_LISTS } from './helpers/mock-api'
-import { MyListsPage } from './page-objects/MyListsPage'
-import { CreateListPage } from './page-objects/CreateListPage'
-import { ProgressViewPage } from './page-objects/ProgressViewPage'
+import { MyListsPage } from '../page-objects/MyListsPage'
+import { CreateListPage } from '../page-objects/CreateListPage'
+import { ProgressViewPage } from '../page-objects/ProgressViewPage'
 
 test.describe('Navigation between screens', () => {
   test.beforeEach(async ({ page }) => {
@@ -22,29 +22,19 @@ test.describe('Navigation between screens', () => {
   })
 
   test('navigates to /create from empty state button', async ({ page }) => {
-    await page.route('**/api/lists', async (route) => {
-      if (route.request().method() === 'GET') {
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify([]),
-        })
-      } else {
-        await route.continue()
-      }
-    })
+    await mockApiLists(page, [])
 
     const myLists = new MyListsPage(page)
     await myLists.open()
     await myLists.clickCreateFirstListButton()
   })
 
-  test('navigates to /list/:id when clicking a day card', async ({ page }) => {
+  test('navigates to /list?id=... when clicking a day card', async ({ page }) => {
     const list = DEFAULT_MOCK_LISTS[0]
 
     const myLists = new MyListsPage(page)
     await myLists.open()
-    await myLists.clickDayCard(list.id)
+    await myLists.clickDayCard(list.name)
 
     const progressView = new ProgressViewPage(page)
     await progressView.verifySectionsVisible()

@@ -1,0 +1,19 @@
+{
+    "targetPlatform": "WEB",
+    "screensPath": "page-objects",
+    "uiBlocksPath": "page-objects/components",
+    "testsPath": "tests",
+    "recorderTestClassName": "RecorderTest",
+    "testServerDevicePort": 9095,
+    "testServerLocalPort": 9095,
+    "workDirPath": "/Users/valentina/develop/DailyDo/webapp/tests",
+    "gradleProjectRootPath": "/Users/valentina/develop/DailyDo/webapp/tests",
+    "webConfig": {
+        "mode": "LAUNCH",
+        "browserAgentHost": "127.0.0.1",
+        "browserAgentPort": 3434,
+        "launchUrl": "http://localhost:3000/",
+        "testIdAttribute": "data-testid"
+    },
+    "strictPageObjectMode": false
+}
